@@ -65,7 +65,12 @@ export function Modal({ children }: { children: React.ReactNode }) {
   }, [close]);
 
   return (
-    <div className={styles.backdrop} onMouseDown={close}>
+    <div
+      className={styles.backdrop}
+      onMouseDown={close}
+      // Unscoped name so the route-transition suppression in globals.css matches.
+      style={{ viewTransitionName: "collection-modal" }}
+    >
       <div
         className={styles.panel}
         role="dialog"

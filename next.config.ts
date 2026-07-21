@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // React's <ViewTransition> for animated route changes (spec §16 motion).
+    viewTransition: true,
+  },
   images: {
     // Remote artwork hosts. Providers that expose deterministic thumbnail URLs
     // are allowlisted here (spec §12 prefers local optimized artwork, but a

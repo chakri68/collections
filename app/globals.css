@@ -223,6 +223,55 @@ select:focus {
   }
 }
 
+/* ── Route transitions (React <ViewTransition>) ────────────────────────────
+   The content well fades + drifts on every navigation; old leaves fast, new
+   arrives a touch slower with a phosphor-ish deblur. Fires on client navs
+   only, never the initial paint. */
+::view-transition-old(.screen-exit) {
+  animation: screen-out 120ms ease-in both;
+}
+::view-transition-new(.screen-enter) {
+  animation: screen-in 240ms ease-out 90ms both;
+}
+@keyframes screen-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+    filter: blur(2px);
+  }
+}
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Anchor the header — it must not move while the content slides under it. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* Keep the modal out of the route transition — it runs its own fade/pop. */
+::view-transition-group(collection-modal),
+::view-transition-old(collection-modal),
+::view-transition-new(collection-modal) {
+  animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -230,5 +279,12 @@ select:focus {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+  /* Positional route motion is the biggest sensitivity trigger — kill it. */
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
   }
 }

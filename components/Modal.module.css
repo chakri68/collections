@@ -2,6 +2,8 @@
   position: fixed;
   inset: 0;
   z-index: 50;
+  /* view-transition-name is set inline in Modal.tsx (not here) — CSS Modules
+     would scope the value and break the global suppression rule that matches it. */
   display: grid;
   place-items: start center;
   padding: 40px 16px;

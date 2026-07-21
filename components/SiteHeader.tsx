@@ -21,7 +21,7 @@ export function SiteHeader({ types }: { types: NavType[] }) {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} style={{ viewTransitionName: "site-header" }}>
       <Link href="/" className={`${styles.brand} pixel`}>
         COLLECTION
       </Link>

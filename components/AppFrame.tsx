@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import { loadPublicSnapshot } from "@/lib/content/loader";
 import { typesPresent } from "@/lib/content/query";
 import { getContentType } from "@/lib/content/registry/content-types";
@@ -21,7 +22,14 @@ export async function AppFrame({ children }: { children: React.ReactNode }) {
     <>
       <BootScreen />
       <SiteHeader types={types} />
-      <main className={styles.main}>{children}</main>
+      <main className={styles.main}>
+        {/* Animate the content on every route change; the header is anchored
+            (see globals.css) so only this well moves. Fires on client
+            navigations only — not the initial paint. */}
+        <ViewTransition enter="screen-enter" exit="screen-exit">
+          {children}
+        </ViewTransition>
+      </main>
     </>
   );
 }
