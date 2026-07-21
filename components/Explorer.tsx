@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ContentItem } from "@/lib/content/types";
 import { searchIndex, type SearchIndex } from "@/lib/content/search";
@@ -34,6 +34,7 @@ export function Explorer({ items, index, types, moods, lockedType }: ExplorerPro
   const [type, setType] = useState<string | null>(lockedType ?? null);
   const [mood, setMood] = useState<string | null>(null);
   const [sort, setSort] = useState<Sort>("recent");
+  const [open, setOpen] = useState(false);
 
   const byId = useMemo(() => new Map(items.map((i) => [i.id, i])), [items]);
 
@@ -60,11 +61,28 @@ export function Explorer({ items, index, types, moods, lockedType }: ExplorerPro
   }, [items, byId, index, q, type, mood, sort]);
 
   const random = () => {
-    // Random Thing, scoped to the current filters (spec §5.2).
     if (filtered.length === 0) return;
     const pick = filtered[Math.floor(Math.random() * filtered.length)];
     router.push(`/item/${pick.slug}`);
   };
+
+  // Count of applied facets (type only counts when it isn't the locked one).
+  const activeCount =
+    (type && type !== lockedType ? 1 : 0) + (mood ? 1 : 0) + (sort !== "recent" ? 1 : 0);
+
+  const clear = () => {
+    if (!lockedType) setType(null);
+    setMood(null);
+    setSort("recent");
+  };
+
+  // Re-key the results on facet/sort change so the container replays its
+  // enter animation; typing in search updates in place (same key) with no
+  // re-animation. Cheap, and keeps the route-level transition uninvolved.
+  const resultsKey = `${type ?? ""}|${mood ?? ""}|${sort}`;
+
+  const panelRef = useRef<HTMLDivElement>(null);
+  useCloseOnOutside(open, panelRef, () => setOpen(false));
 
   return (
     <div>
@@ -78,69 +96,104 @@ export function Explorer({ items, index, types, moods, lockedType }: ExplorerPro
             aria-label="Search the collection"
           />
         </label>
+
+        <div className={styles.filterWrap} ref={panelRef}>
+          <button
+            className={`${styles.filterBtn} ${activeCount > 0 ? styles.filterActive : ""}`}
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+          >
+            ▾ Filters{activeCount > 0 ? ` · ${activeCount}` : ""}
+          </button>
+
+          {open && (
+            <div className={styles.dropdown} role="group" aria-label="Filters">
+              {!lockedType && types.length > 1 && (
+                <div className={styles.group}>
+                  <span className="label">Type</span>
+                  <div className={styles.chips}>
+                    <button className={`chip ${type === null ? "on" : ""}`} onClick={() => setType(null)}>All</button>
+                    {types.map((t) => (
+                      <button
+                        key={t.id}
+                        className={`chip ${type === t.id ? "on" : ""}`}
+                        onClick={() => setType(type === t.id ? null : t.id)}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {moods.length > 0 && (
+                <div className={styles.group}>
+                  <span className="label">Mood</span>
+                  <div className={styles.chips}>
+                    <button className={`chip ${mood === null ? "on" : ""}`} onClick={() => setMood(null)}>Any</button>
+                    {moods.map((m) => (
+                      <button
+                        key={m.id}
+                        className={`chip ${mood === m.id ? "on" : ""}`}
+                        onClick={() => setMood(mood === m.id ? null : m.id)}
+                      >
+                        {m.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.group}>
+                <span className="label">Sort</span>
+                <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} aria-label="Sort order">
+                  <option value="recent">Recently added</option>
+                  <option value="oldest">Oldest first</option>
+                  <option value="title">Title A–Z</option>
+                </select>
+              </div>
+
+              {activeCount > 0 && (
+                <button className={styles.clear} onClick={clear}>Clear filters</button>
+              )}
+            </div>
+          )}
+        </div>
+
         <span className={`${styles.count} tabular`}>
           {filtered.length} {filtered.length === 1 ? "thing" : "things"}
         </span>
+        <button className="btn" onClick={random} disabled={filtered.length === 0}>
+          ◆ Random
+        </button>
       </div>
 
-      <div className={styles.facets}>
-        {!lockedType && types.length > 1 && (
-          <div className={styles.facetRow}>
-            <span className={`${styles.facetLabel} label`}>Type</span>
-            <button
-              className={`chip ${type === null ? "on" : ""}`}
-              onClick={() => setType(null)}
-            >
-              All
-            </button>
-            {types.map((t) => (
-              <button
-                key={t.id}
-                className={`chip ${type === t.id ? "on" : ""}`}
-                onClick={() => setType(type === t.id ? null : t.id)}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {moods.length > 0 && (
-          <div className={styles.facetRow}>
-            <span className={`${styles.facetLabel} label`}>Mood</span>
-            <button
-              className={`chip ${mood === null ? "on" : ""}`}
-              onClick={() => setMood(null)}
-            >
-              Any
-            </button>
-            {moods.map((m) => (
-              <button
-                key={m.id}
-                className={`chip ${mood === m.id ? "on" : ""}`}
-                onClick={() => setMood(mood === m.id ? null : m.id)}
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        <div className={styles.controls}>
-          <span className={`${styles.facetLabel} label`}>Sort</span>
-          <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} aria-label="Sort order">
-            <option value="recent">Recently added</option>
-            <option value="oldest">Oldest first</option>
-            <option value="title">Title A–Z</option>
-          </select>
-          <span className={styles.grow} />
-          <button className="btn" onClick={random} disabled={filtered.length === 0}>
-            ◆ Random thing
-          </button>
-        </div>
+      <div key={resultsKey} className={styles.results}>
+        <Grid items={filtered} />
       </div>
-
-      <Grid items={filtered} />
     </div>
   );
+}
+
+/** Close the dropdown on an outside click or Escape. */
+function useCloseOnOutside(
+  open: boolean,
+  ref: React.RefObject<HTMLElement | null>,
+  onClose: () => void,
+) {
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open, ref, onClose]);
 }

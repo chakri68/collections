@@ -53,6 +53,13 @@ html,
 body {
   height: 100%;
 }
+/* Always reserve the scrollbar gutter. Without this, navigating between a long
+   page (has scrollbar) and a short one (none) changes the content width and
+   shifts everything sideways — visible as horizontal drift in route transitions
+   and as the header jumping when a modal locks scroll. */
+html {
+  scrollbar-gutter: stable;
+}
 body {
   background: var(--bg);
   color: var(--text);
@@ -235,10 +242,11 @@ select:focus {
 ::view-transition-new(.screen) {
   animation: screen-in 240ms ease-out 90ms both;
 }
-/* Don't let the boundary's box morph between differently-tall pages — that
-   reads as a stretch. Keep it snappy; the old/new crossfade carries the motion. */
+/* No group morph: the box snapping to its new size means the only motion is the
+   vertical drift on old/new. Morphing the box interpolates position/size, which
+   reads as a sideways slide when page widths/heights differ. */
 ::view-transition-group(.screen) {
-  animation-duration: 240ms;
+  animation: none;
 }
 @keyframes screen-out {
   to {

@@ -68,9 +68,32 @@
     transform: none;
   }
 }
+
+/* Exit: reverse of the entrance, a touch faster. Driven by the `closing` state
+   in Modal.tsx, which waits EXIT_MS before router.back() so this can play. */
+.closing {
+  animation: modal-fade-out 0.19s ease-in forwards;
+}
+.closing .panel {
+  animation: modal-pop-out 0.19s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+@keyframes modal-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes modal-pop-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .backdrop,
-  .panel {
+  .panel,
+  .closing,
+  .closing .panel {
     animation: none;
   }
 }

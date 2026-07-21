@@ -1,23 +1,38 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Modal.module.css";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input, select, textarea, iframe, [tabindex]:not([tabindex="-1"])';
 
+// Keep in sync with the .closing exit animation in Modal.module.css.
+const EXIT_MS = 190;
+
 /**
  * Modal shell for the intercepted entry view. Client-only so it can trap focus,
- * close on Escape/backdrop, and lock body scroll; the content inside stays a
- * Server Component (spec §11.2). Closing is router.back() — the URL was pushed
- * by the intercepting navigation, so back returns to the grid with state intact.
+ * close on Escape/backdrop, and lock scroll; the content inside stays a Server
+ * Component (spec §11.2).
+ *
+ * Close is deferred: we play an exit animation first, then router.back() (the
+ * intercepting nav pushed the URL, so back returns to the grid). Scroll is
+ * locked on <html>, which carries scrollbar-gutter: stable — so the reserved
+ * gutter stays and nothing shifts sideways while the modal is open.
  */
 export function Modal({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const panelRef = useRef<HTMLDivElement>(null);
+  const [closing, setClosing] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const close = useCallback(() => router.back(), [router]);
+  const close = useCallback(() => {
+    setClosing((already) => {
+      if (already) return already;
+      closeTimer.current = setTimeout(() => router.back(), EXIT_MS);
+      return true;
+    });
+  }, [router]);
 
   useEffect(() => {
     const restoreTo = document.activeElement as HTMLElement | null;
@@ -25,16 +40,13 @@ export function Modal({ children }: { children: React.ReactNode }) {
     // preventScroll: focusing a tall panel would otherwise scroll it into view,
     // opening the modal a little scrolled down instead of at the top.
     panel?.focus({ preventScroll: true });
-    // Start the (scrollable) backdrop at the top regardless of where the page
-    // was scrolled when the modal opened.
     panel?.parentElement?.scrollTo?.(0, 0);
 
-    // Lock scroll under the modal without a layout jump.
-    const prevOverflow = document.body.style.overflow;
-    const prevPad = document.body.style.paddingRight;
-    const gap = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = "hidden";
-    if (gap > 0) document.body.style.paddingRight = `${gap}px`;
+    // Lock the document scroll. The gutter is reserved (scrollbar-gutter:stable
+    // on <html>), so hiding overflow doesn't change width or shift the header.
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = "hidden";
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -43,7 +55,6 @@ export function Modal({ children }: { children: React.ReactNode }) {
         return;
       }
       if (e.key !== "Tab" || !panel) return;
-      // Focus trap.
       const items = panel.querySelectorAll<HTMLElement>(FOCUSABLE);
       if (items.length === 0) {
         e.preventDefault();
@@ -63,15 +74,15 @@ export function Modal({ children }: { children: React.ReactNode }) {
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
-      document.body.style.paddingRight = prevPad;
+      root.style.overflow = prevOverflow;
+      if (closeTimer.current) clearTimeout(closeTimer.current);
       restoreTo?.focus?.();
     };
   }, [close]);
 
   return (
     <div
-      className={styles.backdrop}
+      className={`${styles.backdrop} ${closing ? styles.closing : ""}`}
       onMouseDown={close}
       // Unscoped name so the route-transition suppression in globals.css matches.
       style={{ viewTransitionName: "collection-modal" }}
@@ -82,7 +93,6 @@ export function Modal({ children }: { children: React.ReactNode }) {
         aria-modal="true"
         tabIndex={-1}
         ref={panelRef}
-        // Clicks inside the panel must not bubble to the backdrop's close.
         onMouseDown={(e) => e.stopPropagation()}
       >
         <button className={styles.close} onClick={close} aria-label="Close">
