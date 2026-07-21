@@ -53,8 +53,17 @@ export const spotifyAdapter: ProviderAdapter = {
   getEmbed(item: ContentItem): EmbedDescriptor | null {
     const embed = item.source?.embedUrl;
     if (!embed) return null;
+    // theme=0 is Spotify's dark embed — no white background against our theme.
+    let src = embed;
+    try {
+      const url = new URL(embed);
+      url.searchParams.set("theme", "0");
+      src = url.toString();
+    } catch {
+      /* keep the raw embed if it somehow isn't a valid URL */
+    }
     return {
-      src: embed,
+      src,
       title: `${item.title} — Spotify`,
       aspectRatio: item.type === "song" ? "1 / 1" : "16 / 9",
       allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
