@@ -4,6 +4,7 @@ import { featured, recentlyAdded, inCollection } from "@/lib/content/query";
 import { Section } from "@/components/Section";
 import { Grid } from "@/components/Grid";
 import { RandomButton } from "@/components/RandomButton";
+import { SuggestBox } from "@/components/SuggestBox";
 import styles from "./page.module.css";
 
 export default async function Home() {
@@ -59,6 +60,8 @@ export default async function Home() {
           </Section>
         );
       })}
+
+      <SuggestBox />
     </div>
   );
 }

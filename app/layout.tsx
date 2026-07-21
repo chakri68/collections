@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Press_Start_2P } from "next/font/google";
+import Script from "next/script";
 import { AppFrame } from "@/components/AppFrame";
 import "./globals.css";
 
@@ -19,6 +20,8 @@ const pressStart = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
+  // The production origin, so relative OG images and canonical URLs resolve.
+  metadataBase: new URL("https://lib.chakri.me"),
   title: {
     default: "Collection",
     template: "%s · Collection",
@@ -43,6 +46,13 @@ export default function RootLayout({
       <body>
         <AppFrame>{children}</AppFrame>
         {modal}
+        {/* Cloudflare Web Analytics — cookieless, no PII (spec §17). Loads after
+            hydration so it never blocks paint. */}
+        <Script
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          strategy="afterInteractive"
+          data-cf-beacon='{"token": "d32f9ec67a08462284b59ccf606e7507"}'
+        />
       </body>
     </html>
   );

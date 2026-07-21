@@ -1,0 +1,60 @@
+.box {
+  margin-top: 48px;
+  padding: 22px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-card);
+  background: radial-gradient(circle at 50% 0%, #0e0d0b, var(--panel-2) 70%);
+}
+.title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.lead {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 52ch;
+  margin-bottom: 16px;
+}
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.input {
+  flex: 1;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  resize: vertical;
+  min-height: 42px;
+}
+.input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+.row .btn,
+.row button {
+  white-space: nowrap;
+  align-self: flex-end;
+}
+.copied {
+  margin-top: 10px;
+  color: var(--accent-dim);
+  font-size: 12px;
+}
+@media (max-width: 560px) {
+  .row {
+    flex-direction: column;
+  }
+  .row button {
+    align-self: stretch;
+  }
+}
