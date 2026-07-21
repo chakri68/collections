@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "pop-muzik",
+  "slug": "pop-muzik",
+  "type": "song",
+  "provider": "spotify",
+  "title": "Pop Muzik",
+  "subtitle": "Spotify",
+  "creator": "M / Robin Scott, Robin Scott",
+  "description": "M / Robin Scott, Robin Scott · Pop Muzik · Song · 2022",
+  "note": "I mean just a crazy good pop song from the 70s",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://open.spotify.com/track/6z3HAUZpAyJ0ctsbAwAiw3",
+    "canonicalUrl": "https://open.spotify.com/track/6z3HAUZpAyJ0ctsbAwAiw3",
+    "providerId": "track:6z3HAUZpAyJ0ctsbAwAiw3",
+    "embedUrl": "https://open.spotify.com/embed/track/6z3HAUZpAyJ0ctsbAwAiw3"
+  },
+  "artwork": {
+    "src": "https://i.scdn.co/image/ab67616d0000b27381baa715d926ff54df1620f4",
+    "alt": "Pop Muzik"
+  },
+  "tags": [
+    "oldie",
+    "pop"
+  ],
+  "moods": [],
+  "collections": [],
+  "visibility": "published",
+  "createdAt": "2026-07-21T21:55:45.253Z",
+  "updatedAt": "2026-07-21T21:55:45.253Z",
+  "publishedAt": "2026-07-21T21:55:45.253Z"
+}
