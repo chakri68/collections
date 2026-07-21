@@ -1,5 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#000000"/>
-  <text x="128" y="330" font-family="monospace" font-size="300" font-weight="700"
-        fill="#ffb000" style="filter: drop-shadow(0 0 18px rgba(255,176,0,0.6))">&gt;</text>
+  <!-- PWA/maskable variant of the mark: full-bleed black, stack centered inside
+       the ~80% safe zone so mask crops (circle/squircle) never clip a card. -->
+  <defs>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="10" result="b" />
+      <feMerge>
+        <feMergeNode in="b" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" fill="#000000" />
+
+  <!-- Back card (dim) -->
+  <rect x="240" y="150" width="146" height="190" rx="16"
+        fill="none" stroke="#ffb000" stroke-opacity="0.28" stroke-width="9" />
+  <!-- Middle card -->
+  <rect x="214" y="172" width="146" height="190" rx="16"
+        fill="none" stroke="#ffb000" stroke-opacity="0.55" stroke-width="9" />
+
+  <!-- Front card: solid amber, glowing -->
+  <g filter="url(#glow)">
+    <rect x="166" y="196" width="172" height="210" rx="18" fill="#ffb000" />
+  </g>
+  <rect x="192" y="228" width="96" height="18" rx="9" fill="#000000" />
+  <rect x="192" y="258" width="122" height="11" rx="5" fill="#000000" fill-opacity="0.62" />
+  <rect x="192" y="280" width="106" height="11" rx="5" fill="#000000" fill-opacity="0.62" />
 </svg>

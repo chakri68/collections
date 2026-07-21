@@ -2,7 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Press_Start_2P } from "next/font/google";
 import Script from "next/script";
 import { AppFrame } from "@/components/AppFrame";
+import { SITE_URL } from "@/lib/site-config";
 import "./globals.css";
+
+const DESCRIPTION =
+  "A small personal museum of things worth keeping — and the reason each one was kept.";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -21,14 +25,46 @@ const pressStart = Press_Start_2P({
 
 export const metadata: Metadata = {
   // The production origin, so relative OG images and canonical URLs resolve.
-  metadataBase: new URL("https://lib.chakri.me"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Collection",
     template: "%s · Collection",
   },
-  description:
-    "A small personal museum of things worth keeping — and the reason each one was kept.",
+  description: DESCRIPTION,
   applicationName: "Collection",
+  keywords: [
+    "collection",
+    "personal museum",
+    "curated",
+    "recommendations",
+    "books",
+    "films",
+    "music",
+    "games",
+  ],
+  authors: [{ name: "Chakri", url: SITE_URL }],
+  creator: "Chakri",
+  alternates: { canonical: "/" },
+  // og:image / twitter:image are injected automatically by app/opengraph-image
+  // and app/twitter-image; only the text fields are set here.
+  openGraph: {
+    type: "website",
+    siteName: "Collection",
+    title: "Collection",
+    description: DESCRIPTION,
+    url: "/",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Collection",
+    description: DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Collection" },
 };
 

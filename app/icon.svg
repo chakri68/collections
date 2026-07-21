@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Amber Phosphor mark: a stack of kept cards. Two dim outlined cards peek
+       behind a solid, glowing amber front card — "things worth keeping." -->
+  <defs>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="b" />
+      <feMerge>
+        <feMergeNode in="b" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Rounded black body; corners stay transparent so it reads on any tab. -->
+  <rect width="512" height="512" rx="104" fill="#000000" />
+
+  <!-- Back card (dim) -->
+  <rect x="212" y="104" width="184" height="240" rx="20"
+        fill="none" stroke="#ffb000" stroke-opacity="0.28" stroke-width="10" />
+  <!-- Middle card (dimmer amber, one step forward) -->
+  <rect x="180" y="132" width="184" height="240" rx="20"
+        fill="none" stroke="#ffb000" stroke-opacity="0.55" stroke-width="10" />
+
+  <!-- Front card: solid amber, glowing -->
+  <g filter="url(#glow)">
+    <rect x="120" y="164" width="216" height="264" rx="24" fill="#ffb000" />
+  </g>
+  <!-- Content lines on the front card (black), suggesting a saved entry. -->
+  <rect x="152" y="204" width="120" height="22" rx="11" fill="#000000" />
+  <rect x="152" y="242" width="152" height="14" rx="7" fill="#000000" fill-opacity="0.62" />
+  <rect x="152" y="270" width="132" height="14" rx="7" fill="#000000" fill-opacity="0.62" />
+</svg>
