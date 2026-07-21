@@ -16,7 +16,18 @@ Everything lives as version-controlled JSON. Adding a thing is a commit. The sit
 - Lazy provider embeds that only load on click and fall back to Open Original.
 - The boot sequence, installable manifest (with a `share_target` declaration wired for Phase 2).
 
-**Phase 2 (next): owner capture + Git writes** — auth, the share-to-PWA capture flow, metadata enrichment, and the server-side Git commit endpoint. See `spec.md` §8 and §20.
+**Phase 2 (done): owner capture + Git writes.**
+
+- Single-owner password → HMAC-signed HttpOnly session. `proxy.ts` gates `/capture` and `/edit`; every write route re-verifies. Public pages stay static — owner chrome checks status client-side, so the layout never reads cookies.
+- `/capture` takes the share-target GET (and an in-app Add button). Provider registry prefills; `/api/metadata` enriches behind an SSRF guard (http(s) only, private IPs blocked, redirects re-validated, size/time caps).
+- Review form with live preview, inferred-field markers, and a localStorage draft that survives a failed save.
+- `POST /api/items`: auth + same-origin CSRF + schema + dedupe + edit-conflict detection, then writes `content/items/<year>/<slug>.json` and commits. Idempotency key collapses retries into one commit. Server owns id/slug/timestamps.
+
+Set `OWNER_PASSWORD` and `SESSION_SECRET` — see `.env.example`. Without them it runs on a loud-warning dev default (`let-me-in`).
+
+**Phase 3 (next): personal museum features** — curated collections, moods, timeline, related-item surfacing, Random Thing polish, install education, and feeds. See `spec.md` §20.
+
+**Deferred from P2:** full IndexedDB offline-share queue (the localStorage draft covers the retryable case), and a remote Git-provider committer for serverless deploys (local git commit covers the owner-runs-it-locally case).
 
 ## Running it
 
