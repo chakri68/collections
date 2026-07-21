@@ -1,6 +1,5 @@
 import "server-only";
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { cache } from "react";
 import { createHash } from "node:crypto";
 import {
   contentItemSchema,
@@ -16,54 +15,30 @@ import type {
   ContentSnapshot,
   Manifest,
 } from "./types";
+import { readContentFiles, type ContentFile } from "./source";
 
-const CONTENT_DIR = path.join(process.cwd(), "content");
-const ITEMS_DIR = path.join(CONTENT_DIR, "items");
-
-async function readJson(file: string): Promise<unknown> {
-  const raw = await fs.readFile(file, "utf8");
-  return JSON.parse(raw);
-}
-
-/** Recursively collect *.json under content/items. */
-async function itemFiles(dir: string): Promise<string[]> {
-  let entries: import("node:fs").Dirent[];
+function parseItem(file: ContentFile): ContentItem | null {
   try {
-    entries = await fs.readdir(dir, { withFileTypes: true });
-  } catch {
-    return [];
-  }
-  const files: string[] = [];
-  for (const entry of entries) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...(await itemFiles(full)));
-    else if (entry.isFile() && entry.name.endsWith(".json")) files.push(full);
-  }
-  return files.sort();
-}
-
-async function loadItems(): Promise<ContentItem[]> {
-  const files = await itemFiles(ITEMS_DIR);
-  const items: ContentItem[] = [];
-  for (const file of files) {
-    try {
-      const parsed = contentItemSchema.safeParse(await readJson(file));
-      if (!parsed.success) {
-        // Log and omit — one bad item must not trap the whole site (spec §10).
-        console.warn(`[content] skipping invalid item ${path.relative(CONTENT_DIR, file)}:`, parsed.error.issues[0]?.message);
-        continue;
-      }
-      items.push(parsed.data);
-    } catch (err) {
-      console.warn(`[content] skipping unreadable item ${path.relative(CONTENT_DIR, file)}:`, err);
+    const parsed = contentItemSchema.safeParse(JSON.parse(file.text));
+    if (!parsed.success) {
+      // Log and omit — one bad item must not trap the whole site (spec §10).
+      console.warn(`[content] skipping invalid item ${file.path}:`, parsed.error.issues[0]?.message);
+      return null;
     }
+    return parsed.data;
+  } catch (err) {
+    console.warn(`[content] skipping unreadable item ${file.path}:`, err);
+    return null;
   }
-  return items;
 }
 
-async function loadList<T>(fileName: string, schema: { safeParse: (v: unknown) => { success: boolean; data?: T } }): Promise<T[]> {
+function parseList<T>(
+  file: ContentFile | undefined,
+  schema: { safeParse: (v: unknown) => { success: boolean; data?: T } },
+): T[] {
+  if (!file) return [];
   try {
-    const raw = await readJson(path.join(CONTENT_DIR, fileName));
+    const raw = JSON.parse(file.text);
     if (!Array.isArray(raw)) return [];
     const out: T[] = [];
     for (const entry of raw) {
@@ -88,7 +63,7 @@ function buildManifest(items: ContentItem[]): Manifest {
   return {
     schemaVersion: 1,
     // Deterministic: derived from content, not wall-clock, so identical content
-    // rebuilds to an identical manifest (and cache stays valid).
+    // produces an identical manifest.
     snapshotVersion: hash,
     builtAt: process.env.SOURCE_DATE_EPOCH
       ? new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000).toISOString()
@@ -99,31 +74,28 @@ function buildManifest(items: ContentItem[]): Manifest {
   };
 }
 
-let cached: Promise<ContentSnapshot> | null = null;
-
-/** Full snapshot including drafts/archived — server-only, for the owner/editor. */
-export function loadFullSnapshot(): Promise<ContentSnapshot> {
-  if (cached) return cached;
-  cached = (async () => {
-    const [items, collections, tags, moods] = await Promise.all([
-      loadItems(),
-      loadList<Collection>("collections.json", collectionSchema),
-      loadList<Tag>("tags.json", tagSchema),
-      loadList<Mood>("moods.json", moodSchema),
-    ]);
-    return { manifest: buildManifest(items), items, collections, tags, moods };
-  })();
-  return cached;
-}
-
 /**
- * Drop the in-process cache so the next load re-reads disk. Called after a write
- * so the owner sees their change without a restart; the deployed static build
- * gets it on the next rebuild regardless.
+ * Full snapshot including drafts/archived — server-only, for the owner/editor.
+ * Wrapped in React cache() so it's computed once per render pass; freshness
+ * across requests is governed by the content source (disk read in fs mode, the
+ * tagged fetch cache in github mode).
  */
-export function invalidateSnapshot(): void {
-  cached = null;
-}
+export const loadFullSnapshot = cache(async (): Promise<ContentSnapshot> => {
+  const files = await readContentFiles();
+  const byPath = new Map(files.map((f) => [f.path, f]));
+
+  const items = files
+    .filter((f) => f.path.startsWith("content/items/"))
+    .sort((a, b) => a.path.localeCompare(b.path))
+    .map(parseItem)
+    .filter((i): i is ContentItem => i !== null);
+
+  const collections = parseList<Collection>(byPath.get("content/collections.json"), collectionSchema);
+  const tags = parseList<Tag>(byPath.get("content/tags.json"), tagSchema);
+  const moods = parseList<Mood>(byPath.get("content/moods.json"), moodSchema);
+
+  return { manifest: buildManifest(items), items, collections, tags, moods };
+});
 
 /** Public snapshot: published + unlisted only. Drafts and archived are dropped. */
 export async function loadPublicSnapshot(): Promise<ContentSnapshot> {

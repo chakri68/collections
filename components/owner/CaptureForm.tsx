@@ -86,10 +86,10 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
       // desync hydration.
       if (saved) {
         const draft = JSON.parse(saved) as CaptureInput;
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+        /* eslint-disable react-hooks/set-state-in-effect */
         setForm(draft);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setTagsText(csv(draft.tags));
+        /* eslint-enable react-hooks/set-state-in-effect */
       }
     } catch {}
   }, [mode, draftKey]);

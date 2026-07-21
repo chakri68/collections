@@ -1,6 +1,7 @@
 import "server-only";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { contentItemSchema } from "../content/schema";
-import { loadFullSnapshot, invalidateSnapshot } from "../content/loader";
+import { loadFullSnapshot } from "../content/loader";
 import { byId } from "../content/query";
 import { buildContentItem, applyEdit, findDuplicates } from "./build-item";
 import { defaultCommitter, commitMessage, type Committer } from "../git/committer";
@@ -69,7 +70,15 @@ export async function saveItem(
 
   try {
     const { commit, committed } = await committer.write(parsed.data, commitMessage(parsed.data, mode));
-    invalidateSnapshot(); // owner sees the change immediately
+    // Purge the content cache so the change shows immediately — no rebuild
+    // needed. Tag drops the source fetches (github mode); path revalidation
+    // regenerates the affected pages.
+    try {
+      revalidateTag("content", "max");
+      revalidatePath("/", "layout");
+    } catch {
+      // revalidate* throw outside a request scope (e.g. a unit test) — ignore.
+    }
     return remember(req.idempotencyKey, {
       ok: true,
       id: parsed.data.id,
