@@ -55,5 +55,15 @@ export async function POST(request: Request) {
     ],
   };
 
+  // Spotify's og:description is "Artist · Album · Song · Year" — pull the artist
+  // into creator so songs/albums aren't left uncredited.
+  if (adapter.id === "spotify" && !merged.creator && merged.description?.includes(" · ")) {
+    const artist = merged.description.split(" · ")[0]?.trim();
+    if (artist) {
+      merged.creator = artist;
+      if (!merged.inferredFields.includes("creator")) merged.inferredFields.push("creator");
+    }
+  }
+
   return NextResponse.json(merged);
 }

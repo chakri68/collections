@@ -66,6 +66,71 @@ export const localGitCommitter: Committer = {
   },
 };
 
+/**
+ * Production committer: commits one item file through the GitHub Contents API
+ * with a repository-scoped token (spec §8.1 step 7). This is what runs on a
+ * deployed host, where there is no local working tree. The token stays server-
+ * side — it is read from env and never sent to the browser.
+ *
+ * Env: GITHUB_TOKEN (contents:write on the repo), GITHUB_REPO ("owner/name"),
+ * GITHUB_BRANCH (default "main").
+ */
+export function githubCommitter(config?: {
+  token?: string;
+  repo?: string;
+  branch?: string;
+}): Committer {
+  const token = config?.token ?? process.env.GITHUB_TOKEN;
+  const repo = config?.repo ?? process.env.GITHUB_REPO;
+  const branch = config?.branch ?? process.env.GITHUB_BRANCH ?? "main";
+
+  const api = "https://api.github.com";
+  const headers = {
+    authorization: `Bearer ${token}`,
+    accept: "application/vnd.github+json",
+    "x-github-api-version": "2022-11-28",
+    "content-type": "application/json",
+    "user-agent": "collection-committer",
+  };
+
+  return {
+    async write(item, message): Promise<CommitResult> {
+      if (!token || !repo) throw new Error("github committer misconfigured: set GITHUB_TOKEN and GITHUB_REPO");
+      const rel = itemFilePath(item).split(path.sep).join("/"); // repo paths are always POSIX
+      const url = `${api}/repos/${repo}/contents/${rel.split("/").map(encodeURIComponent).join("/")}`;
+      const content = Buffer.from(JSON.stringify(item, null, 2) + "\n", "utf8").toString("base64");
+
+      // An update needs the current blob SHA; a create must omit it. 404 = new file.
+      let sha: string | undefined;
+      const head = await fetch(`${url}?ref=${encodeURIComponent(branch)}`, { headers, cache: "no-store" });
+      if (head.ok) {
+        sha = ((await head.json()) as { sha?: string }).sha;
+      } else if (head.status !== 404) {
+        throw new Error(`github read failed (${head.status}): ${await head.text()}`);
+      }
+
+      const res = await fetch(url, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ message, content, branch, sha }),
+      });
+      if (!res.ok) throw new Error(`github write failed (${res.status}): ${await res.text()}`);
+      const body = (await res.json()) as { commit?: { sha?: string } };
+      return { commit: body.commit?.sha ?? "unknown", committed: true };
+    },
+  };
+}
+
+/**
+ * Pick the committer for the current environment: GitHub API when a token +
+ * repo are configured (the deployed case), otherwise a local git commit (the
+ * owner running it on their own machine).
+ */
+export function defaultCommitter(): Committer {
+  if (process.env.GITHUB_TOKEN && process.env.GITHUB_REPO) return githubCommitter();
+  return localGitCommitter;
+}
+
 /** Conventional, readable commit subjects (spec §8.1). */
 export function commitMessage(item: ContentItem, mode: "create" | "update"): string {
   const who = item.creator ? ` by ${item.creator}` : "";

@@ -49,7 +49,9 @@ export default async function CapturePage({
         Add a thing
       </h1>
       <p style={{ color: "var(--muted)", fontSize: 12, marginBottom: 22 }}>
-        {normalized.url ? `From ${adapter.displayName}. Verify the inferred fields, then save.` : "A standalone note. Write the thing."}
+        {normalized.url
+          ? `From ${adapter.displayName}. Verify the inferred fields, then save.`
+          : "Paste a link to pull in a song, video, or page — or just write a note."}
       </p>
       <CaptureForm
         mode="create"

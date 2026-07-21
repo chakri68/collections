@@ -118,12 +118,21 @@ async function safeFetchHtml(startUrl: string): Promise<{ url: string; html: str
 
 function decodeEntities(s: string): string {
   return s
-    .replace(/&amp;/g, "&")
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => safeCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, n) => safeCodePoint(Number(n)))
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"')
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)));
+    .replace(/&amp;/g, "&"); // amp last so it doesn't double-unescape
+}
+
+function safeCodePoint(cp: number): string {
+  try {
+    return Number.isFinite(cp) ? String.fromCodePoint(cp) : "";
+  } catch {
+    return "";
+  }
 }
 
 function metaContent(html: string, key: string, attr: "property" | "name"): string | undefined {

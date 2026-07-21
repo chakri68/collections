@@ -3,7 +3,7 @@ import { contentItemSchema } from "../content/schema";
 import { loadFullSnapshot, invalidateSnapshot } from "../content/loader";
 import { byId } from "../content/query";
 import { buildContentItem, applyEdit, findDuplicates } from "./build-item";
-import { localGitCommitter, commitMessage, type Committer } from "../git/committer";
+import { defaultCommitter, commitMessage, type Committer } from "../git/committer";
 import type { SaveRequest, SaveOutcome } from "./types";
 
 /**
@@ -28,7 +28,7 @@ function remember(key: string, outcome: SaveOutcome): SaveOutcome {
  */
 export async function saveItem(
   req: SaveRequest,
-  committer: Committer = localGitCommitter,
+  committer: Committer = defaultCommitter(),
   now = new Date().toISOString(),
 ): Promise<SaveOutcome> {
   const cached = idempotency.get(req.idempotencyKey);

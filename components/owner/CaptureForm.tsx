@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CaptureInput, SaveOutcome } from "@/lib/capture/types";
 import styles from "./owner.module.css";
@@ -63,9 +63,13 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
   );
 
   const [form, setForm] = useState<CaptureInput>(() => normalize(prefill));
-  const [inferred, setInferred] = useState<Set<string>>(new Set(Object.keys(prefill).filter((k) => prefill[k as keyof CapturePrefill] != null)));
+  // Which fields were auto-filled by enrichment — so the owner knows to verify
+  // them. Starts empty; only enrichment adds to it.
+  const [inferred, setInferred] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const [detecting, setDetecting] = useState(false);
   const enriched = useRef(false);
+  const linkTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Restore a saved draft on mount (create mode only) so a failed/interrupted
   // capture survives a reload (spec §8.4).
@@ -88,25 +92,48 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
     } catch {}
   }, [form, draftKey]);
 
-  // Enrich once, on create, from the shared URL — only fills fields left empty.
+  // Server-side provider detection + OG scrape. Fills only empty fields; user
+  // edits always win (mergeMeta). Shared by the share-target mount and the
+  // manual "paste a link" path.
+  const enrich = useCallback(async (payload: { url?: string; text?: string; title?: string }) => {
+    if (!payload.url && !payload.text) return;
+    setDetecting(true);
+    try {
+      const res = await fetch("/api/metadata", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) return;
+      const meta = await res.json();
+      setForm((prev) => mergeMeta(prev, meta));
+      setInferred((prev) => new Set([...prev, ...(meta.inferredFields ?? [])]));
+    } catch {
+      // Enrichment is best-effort; the owner can fill fields by hand.
+    } finally {
+      setDetecting(false);
+    }
+  }, []);
+
+  // Enrich once on mount from a share-target payload. enrich() sets state as it
+  // fetches — deliberate here (it's the initial data load, not a render loop).
   useEffect(() => {
     if (mode !== "create" || enriched.current) return;
     if (!rawShare?.url && !rawShare?.text) return;
     enriched.current = true;
-    (async () => {
-      try {
-        const res = await fetch("/api/metadata", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(rawShare),
-        });
-        if (!res.ok) return;
-        const meta = await res.json();
-        setForm((prev) => mergeMeta(prev, meta));
-        setInferred((prev) => new Set([...prev, ...(meta.inferredFields ?? [])]));
-      } catch {}
-    })();
-  }, [mode, rawShare]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    enrich(rawShare);
+  }, [mode, rawShare, enrich]);
+
+  // Manual "paste a link": update the source URL immediately, then debounce an
+  // enrich so we don't fetch on every keystroke.
+  const onLink = (url: string) => {
+    setForm((f) => ({ ...f, source: url ? { ...(f.source ?? {}), url } : undefined }));
+    if (linkTimer.current) clearTimeout(linkTimer.current);
+    const trimmed = url.trim();
+    if (!/^https?:\/\/\S+\.\S+/.test(trimmed)) return;
+    linkTimer.current = setTimeout(() => enrich({ url: trimmed }), 600);
+  };
 
   const set = <K extends keyof CaptureInput>(key: K, value: CaptureInput[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -149,8 +176,29 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
   return (
     <form onSubmit={submit} className={styles.capture}>
       <div className={styles.stack}>
+        {mode === "create" && (
+          <label className={styles.field}>
+            <span className="label">
+              Paste a link{" "}
+              {detecting ? (
+                <span className={styles.inferredTag}>· detecting…</span>
+              ) : form.provider && form.provider !== "manual" && form.provider !== "web" ? (
+                <span className={styles.inferredTag}>· {form.provider}</span>
+              ) : null}
+            </span>
+            <input
+              type="url"
+              inputMode="url"
+              value={form.source?.url ?? ""}
+              onChange={(e) => onLink(e.target.value)}
+              placeholder="https://…  (Spotify, YouTube, a link — or leave blank for a note)"
+              aria-label="Paste a link"
+            />
+          </label>
+        )}
+
         <FieldText label="Title" value={form.title} inferred={inferred.has("title")}
-          onChange={(v) => set("title", v)} autoFocus required />
+          onChange={(v) => set("title", v)} autoFocus={mode === "edit"} required />
 
         <div className={styles.row}>
           <label className={styles.field}>
@@ -187,8 +235,10 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
         <ChipField label="Moods" options={moods} selected={form.moods} onToggle={(id) => toggleIn("moods", id)} />
         <ChipField label="Collections" options={collections} selected={form.collections} onToggle={(id) => toggleIn("collections", id)} />
 
-        <FieldText label="Source URL" value={form.source?.url ?? ""}
-          onChange={(v) => set("source", v ? { ...(form.source ?? {}), url: v } : undefined)} />
+        {mode === "edit" && (
+          <FieldText label="Source URL" value={form.source?.url ?? ""}
+            onChange={(v) => set("source", v ? { ...(form.source ?? {}), url: v } : undefined)} />
+        )}
 
         <div className={styles.row}>
           <label className={styles.field}>
@@ -358,14 +408,20 @@ function normalize(p: CapturePrefill): CaptureInput {
   };
 }
 
+// "note"/"website" are the unset defaults a blank capture starts on; a detected
+// provider should be allowed to override them. Any other current type means the
+// owner picked it on purpose, so enrichment leaves it alone.
+const DEFAULT_TYPES = new Set(["website", "note"]);
+
 /** Merge enrichment into the form — user-entered values always win. */
 function mergeMeta(prev: CaptureInput, meta: Record<string, unknown>): CaptureInput {
   const take = <T,>(cur: T | undefined, next: unknown): T | undefined =>
     cur != null && cur !== "" ? cur : (next as T | undefined);
+  const suggested = meta.suggestedType as string | undefined;
   return {
     ...prev,
     provider: (meta.provider as string) ?? prev.provider,
-    type: prev.type && prev.type !== "website" ? prev.type : (meta.suggestedType as string) ?? prev.type,
+    type: prev.type && !DEFAULT_TYPES.has(prev.type) ? prev.type : suggested ?? prev.type,
     title: prev.title || (meta.title as string) || "",
     subtitle: take(prev.subtitle, meta.subtitle),
     creator: take(prev.creator, meta.creator),
