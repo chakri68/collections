@@ -63,6 +63,10 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
   );
 
   const [form, setForm] = useState<CaptureInput>(() => normalize(prefill));
+  // Tags are edited as raw text so a comma survives being typed. Parsing back to
+  // form.tags on every keystroke (via join/split) would strip the trailing
+  // comma the instant you type it, making a second tag impossible.
+  const [tagsText, setTagsText] = useState(() => csv(normalize(prefill).tags));
   // Which fields were auto-filled by enrichment — so the owner knows to verify
   // them. Starts empty; only enrichment adds to it.
   const [inferred, setInferred] = useState<Set<string>>(new Set());
@@ -80,8 +84,13 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
       // Restore must happen in an effect, not a lazy initializer: localStorage
       // isn't available during the server render, and reading it at init would
       // desync hydration.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (saved) setForm(JSON.parse(saved));
+      if (saved) {
+        const draft = JSON.parse(saved) as CaptureInput;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setForm(draft);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setTagsText(csv(draft.tags));
+      }
     } catch {}
   }, [mode, draftKey]);
 
@@ -229,8 +238,8 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
           </label>
         </label>
 
-        <FieldText label="Tags (comma separated)" value={csv(form.tags)}
-          onChange={(v) => set("tags", parseCsv(v))} />
+        <FieldText label="Tags (comma separated)" value={tagsText}
+          onChange={(v) => { setTagsText(v); set("tags", parseCsv(v)); }} />
 
         <ChipField label="Moods" options={moods} selected={form.moods} onToggle={(id) => toggleIn("moods", id)} />
         <ChipField label="Collections" options={collections} selected={form.collections} onToggle={(id) => toggleIn("collections", id)} />
