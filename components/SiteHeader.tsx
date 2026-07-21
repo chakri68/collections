@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { OwnerControls } from "./owner/OwnerControls";
 import styles from "./SiteHeader.module.css";
 
 export interface NavType {
@@ -41,6 +42,7 @@ export function SiteHeader({ types }: { types: NavType[] }) {
           );
         })}
       </nav>
+      <OwnerControls />
     </header>
   );
 }

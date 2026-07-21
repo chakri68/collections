@@ -116,6 +116,15 @@ export function loadFullSnapshot(): Promise<ContentSnapshot> {
   return cached;
 }
 
+/**
+ * Drop the in-process cache so the next load re-reads disk. Called after a write
+ * so the owner sees their change without a restart; the deployed static build
+ * gets it on the next rebuild regardless.
+ */
+export function invalidateSnapshot(): void {
+  cached = null;
+}
+
 /** Public snapshot: published + unlisted only. Drafts and archived are dropped. */
 export async function loadPublicSnapshot(): Promise<ContentSnapshot> {
   const full = await loadFullSnapshot();

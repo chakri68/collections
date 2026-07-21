@@ -8,6 +8,7 @@ import { NoteMarkdown } from "./NoteMarkdown";
 import { Embed } from "./Embed";
 import { Grid } from "./Grid";
 import { Section } from "./Section";
+import { OwnerItemActions } from "./owner/OwnerItemActions";
 import styles from "./ItemDetail.module.css";
 
 /**
@@ -60,6 +61,7 @@ export async function ItemDetail({ slug }: { slug: string }) {
             {provider && provider.id !== "manual" && (
               <span className="chip">{provider.displayName}</span>
             )}
+            <OwnerItemActions slug={item.slug} />
           </div>
           <h1 className={`${styles.title} pixel`}>{item.title}</h1>
           {item.creator && <p className={styles.creator}>{item.creator}</p>}
