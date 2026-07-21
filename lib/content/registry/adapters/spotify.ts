@@ -65,7 +65,12 @@ export const spotifyAdapter: ProviderAdapter = {
     return {
       src,
       title: `${item.title} — Spotify`,
-      aspectRatio: item.type === "song" ? "1 / 1" : "16 / 9",
+      // Spotify picks its layout by WIDTH: in a narrow frame the 152px "standard"
+      // player collapses to the ~80px compact bar and leaves its white
+      // background in the leftover height. The 80px compact player is the one
+      // size that fills consistently at any width, so a track uses it; albums
+      // and playlists need the taller list layout.
+      height: item.type === "song" ? 80 : 352,
       allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
     };
   },

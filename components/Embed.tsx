@@ -32,11 +32,17 @@ export function Embed({ embed, openUrl }: { embed: EmbedDescriptor; openUrl: str
     );
   }
 
+  // A fixed height wins over an aspect ratio (Spotify renders at a fixed height;
+  // a taller frame would show its white background below the player).
+  const sizeStyle: React.CSSProperties = embed.height
+    ? { height: embed.height }
+    : { aspectRatio: embed.aspectRatio ?? "16 / 9" };
+
   if (!active) {
     return (
       <button
         className={styles.poster}
-        style={{ aspectRatio: embed.aspectRatio ?? "16 / 9" }}
+        style={sizeStyle}
         onClick={() => setActive(true)}
         aria-label={`Play ${embed.title}`}
       >
@@ -47,7 +53,7 @@ export function Embed({ embed, openUrl }: { embed: EmbedDescriptor; openUrl: str
   }
 
   return (
-    <div className={styles.frame} style={{ aspectRatio: embed.aspectRatio ?? "16 / 9" }}>
+    <div className={styles.frame} style={sizeStyle}>
       <iframe
         src={embed.src}
         title={embed.title}

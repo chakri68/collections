@@ -68,6 +68,10 @@ export interface EmbedDescriptor {
   src: string;
   title: string;
   aspectRatio?: string;
+  /** Fixed pixel height. Takes precedence over aspectRatio — some players
+   *  (Spotify) render at a fixed height and leave the rest of a taller frame
+   *  as their own (white) background. */
+  height?: number;
   allow?: string;
 }
 
