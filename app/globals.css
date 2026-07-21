@@ -225,13 +225,20 @@ select:focus {
 
 /* ── Route transitions (React <ViewTransition>) ────────────────────────────
    The content well fades + drifts on every navigation; old leaves fast, new
-   arrives a touch slower with a phosphor-ish deblur. Fires on client navs
+   arrives a touch slower with a phosphor-ish deblur. The `.screen` class is
+   applied to both old and new snapshots (via default/update on the boundary);
+   we target old vs new to give each its own direction. Fires on client navs
    only, never the initial paint. */
-::view-transition-old(.screen-exit) {
+::view-transition-old(.screen) {
   animation: screen-out 120ms ease-in both;
 }
-::view-transition-new(.screen-enter) {
+::view-transition-new(.screen) {
   animation: screen-in 240ms ease-out 90ms both;
+}
+/* Don't let the boundary's box morph between differently-tall pages — that
+   reads as a stretch. Keep it snappy; the old/new crossfade carries the motion. */
+::view-transition-group(.screen) {
+  animation-duration: 240ms;
 }
 @keyframes screen-out {
   to {

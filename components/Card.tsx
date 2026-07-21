@@ -16,10 +16,9 @@ export function Card({ item }: { item: ContentItem }) {
   const notePreview = item.noteFormat === "markdown" ? stripMarkdown(item.note) : item.note;
 
   return (
-    <article
-      className={styles.card}
-      style={{ "--card-aspect": type.defaultAspectRatio } as React.CSSProperties}
-    >
+    // Grid cards are uniform: one art aspect for every type (the type-specific
+    // ratio lives on the detail view). Keeps the grid tidy instead of ragged.
+    <article className={styles.card}>
       <Link href={`/item/${item.slug}`} className={styles.link} aria-label={item.title}>
         <div className={styles.art}>
           {item.artwork ? (
@@ -45,19 +44,8 @@ export function Card({ item }: { item: ContentItem }) {
 
         <div className={styles.body}>
           <h3 className={styles.title}>{item.title}</h3>
-          {(item.creator || item.subtitle) && (
-            <p className={styles.creator}>{item.creator ?? item.subtitle}</p>
-          )}
-          {notePreview && <p className={styles.note}>{notePreview}</p>}
-          {item.tags.length > 0 && (
-            <div className={styles.tags}>
-              {item.tags.slice(0, 3).map((tag) => (
-                <span key={tag} className={styles.tag}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
+          <p className={styles.creator}>{item.creator ?? item.subtitle ?? " "}</p>
+          <p className={styles.note}>{notePreview ?? ""}</p>
         </div>
       </Link>
     </article>

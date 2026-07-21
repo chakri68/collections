@@ -22,7 +22,12 @@ export function Modal({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const restoreTo = document.activeElement as HTMLElement | null;
     const panel = panelRef.current;
-    panel?.focus();
+    // preventScroll: focusing a tall panel would otherwise scroll it into view,
+    // opening the modal a little scrolled down instead of at the top.
+    panel?.focus({ preventScroll: true });
+    // Start the (scrollable) backdrop at the top regardless of where the page
+    // was scrolled when the modal opened.
+    panel?.parentElement?.scrollTo?.(0, 0);
 
     // Lock scroll under the modal without a layout jump.
     const prevOverflow = document.body.style.overflow;

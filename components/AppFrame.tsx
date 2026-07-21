@@ -24,9 +24,11 @@ export async function AppFrame({ children }: { children: React.ReactNode }) {
       <SiteHeader types={types} />
       <main className={styles.main}>
         {/* Animate the content on every route change; the header is anchored
-            (see globals.css) so only this well moves. Fires on client
-            navigations only — not the initial paint. */}
-        <ViewTransition enter="screen-enter" exit="screen-exit">
+            (see globals.css) so only this well moves. `default` (not
+            enter/exit) is what matters here: this boundary persists across
+            navigations, so each nav is an *update*, not a mount/unmount —
+            enter/exit classes would never apply. Fires on client navs only. */}
+        <ViewTransition default="screen" update="screen">
           {children}
         </ViewTransition>
       </main>
