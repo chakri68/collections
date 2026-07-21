@@ -36,10 +36,13 @@ export function SuggestBox() {
         Tell me what belongs in here. Hit send and it copies to your clipboard and
         opens my Instagram DMs — just paste.
       </p>
-      <div className={styles.row}>
+      <div className={styles.field}>
+        <span className={styles.prompt} aria-hidden>
+          &gt;
+        </span>
         <textarea
           className={styles.input}
-          rows={2}
+          rows={3}
           value={text}
           onChange={(e) => {
             setText(e.target.value);
@@ -48,15 +51,15 @@ export function SuggestBox() {
           placeholder="You HAVE to add…"
           aria-label="Your suggestion"
         />
+      </div>
+      <div className={styles.footer}>
+        <span className={styles.hint} role="status">
+          {copied ? "Copied — paste it in the DM that just opened." : "Copies to your clipboard, opens my DMs."}
+        </span>
         <button className="btn primary" onClick={send} disabled={text.trim().length === 0}>
           Send it →
         </button>
       </div>
-      {copied && (
-        <p className={styles.copied} role="status">
-          Copied — paste it in the DM that just opened. 📋
-        </p>
-      )}
     </section>
   );
 }

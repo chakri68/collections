@@ -19,42 +19,70 @@
   max-width: 52ch;
   margin-bottom: 16px;
 }
-.row {
+/* Terminal input: a `>` prompt gutter, then the textarea, whole thing framed as
+   one field that lights amber on focus. */
+.field {
   display: flex;
-  gap: 10px;
-  align-items: stretch;
+  align-items: flex-start;
+  gap: 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  transition: border-color 0.12s;
+}
+.field:focus-within {
+  border-color: var(--accent);
+}
+.prompt {
+  color: var(--accent);
+  font-size: 13px;
+  line-height: 1.6;
+  user-select: none;
 }
 .input {
   flex: 1;
-  background: var(--panel-2);
+  background: none;
   color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-input);
-  padding: 8px 10px;
+  border: none;
+  padding: 0;
   font-family: var(--font-mono);
   font-size: 13px;
+  line-height: 1.6;
   resize: vertical;
-  min-height: 42px;
+  min-height: 3lh;
 }
 .input:focus {
-  border-color: var(--accent);
   outline: none;
 }
-.row .btn,
-.row button {
+.input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+.hint {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+.footer button {
   white-space: nowrap;
-  align-self: flex-end;
 }
-.copied {
-  margin-top: 10px;
-  color: var(--accent-dim);
-  font-size: 12px;
-}
-@media (max-width: 560px) {
-  .row {
+
+@media (max-width: 480px) {
+  .footer {
     flex-direction: column;
+    align-items: stretch;
   }
-  .row button {
-    align-self: stretch;
+  .footer button {
+    width: 100%;
+    justify-content: center;
   }
 }
