@@ -1,0 +1,35 @@
+[
+  {
+    "id": "broke-my-brain",
+    "slug": "things-that-broke-my-brain",
+    "title": "Things that broke my brain",
+    "description": "The ones that rearranged some furniture up there and never quite put it back.",
+    "order": ["outer-wilds", "arrival", "everything-in-its-right-place"],
+    "visibility": "published",
+    "rank": 1
+  },
+  {
+    "id": "memory-erase",
+    "slug": "movies-i-would-erase-my-memory-to-watch-again",
+    "title": "Things I'd erase my memory to experience again",
+    "description": "First-time-only magic. The knowledge is the whole thing, so you only get to spend it once.",
+    "visibility": "published",
+    "rank": 2
+  },
+  {
+    "id": "comfort",
+    "slug": "comfort",
+    "title": "Comfort",
+    "description": "Returned to when the world is too much.",
+    "visibility": "published",
+    "rank": 3
+  },
+  {
+    "id": "small-thoughts",
+    "slug": "small-thoughts",
+    "title": "Small thoughts",
+    "description": "Notes that aren't about anything but themselves.",
+    "visibility": "published",
+    "rank": 4
+  }
+]

@@ -1,0 +1,10 @@
+.back {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 22px;
+  transition: color 0.12s;
+}
+.back:hover {
+  color: var(--accent);
+}

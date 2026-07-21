@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "note-old-films",
+  "slug": "why-old-films-feel-different",
+  "type": "note",
+  "provider": "manual",
+  "title": "Why old films feel different",
+  "note": "There is a kind of *patience* in them that newer films rarely allow.\n\nA scene is permitted to simply **exist** for a while before it justifies itself. The camera trusts you to be bored for ten seconds. That trust is the texture.\n\n- Fewer cuts per minute\n- Faces held longer than comfortable\n- Silence used as a material, not a gap to fill\n\nI don't think it's nostalgia. I think it's a different theory of the viewer's attention — one that assumed attention was a thing you *gave*, not a thing to be *captured*.",
+  "noteFormat": "markdown",
+  "tags": ["films", "memory"],
+  "moods": ["nostalgic"],
+  "collections": ["small-thoughts"],
+  "relatedItemIds": ["arrival"],
+  "visibility": "published",
+  "createdAt": "2026-07-21T13:30:00+05:30",
+  "updatedAt": "2026-07-21T13:30:00+05:30",
+  "publishedAt": "2026-07-21T13:30:00+05:30"
+}

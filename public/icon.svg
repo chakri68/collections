@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#000000"/>
+  <text x="128" y="330" font-family="monospace" font-size="300" font-weight="700"
+        fill="#ffb000" style="filter: drop-shadow(0 0 18px rgba(255,176,0,0.6))">&gt;</text>
+</svg>

@@ -1,0 +1,24 @@
+.section {
+  margin-bottom: 40px;
+}
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+.action {
+  flex-shrink: 0;
+}

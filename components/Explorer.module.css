@@ -1,0 +1,45 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.search {
+  flex: 1;
+  min-width: 200px;
+}
+.search input {
+  width: 100%;
+}
+.count {
+  color: var(--muted);
+  font-size: 12px;
+  margin-left: auto;
+}
+
+.facets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.facetRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+}
+.facetLabel {
+  min-width: 78px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.grow {
+  flex: 1;
+}

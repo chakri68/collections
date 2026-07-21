@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "everything-in-its-right-place",
+  "slug": "everything-in-its-right-place",
+  "type": "song",
+  "provider": "spotify",
+  "title": "Everything in Its Right Place",
+  "creator": "Radiohead",
+  "note": "The two-plus minutes of vocal-sample fog before it resolves is the whole point. It teaches you to wait.",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://open.spotify.com/track/2QhURnm7mQDxBb5jWkbDug",
+    "canonicalUrl": "https://open.spotify.com/track/2QhURnm7mQDxBb5jWkbDug",
+    "providerId": "track:2QhURnm7mQDxBb5jWkbDug",
+    "embedUrl": "https://open.spotify.com/embed/track/2QhURnm7mQDxBb5jWkbDug"
+  },
+  "metadata": { "album": "Kid A", "year": 2000 },
+  "tags": ["radiohead", "electronic"],
+  "moods": ["cerebral"],
+  "collections": ["broke-my-brain"],
+  "featured": true,
+  "visibility": "published",
+  "discoveredAt": "2026-03-02T09:15:00+05:30",
+  "createdAt": "2026-03-02T09:15:00+05:30",
+  "updatedAt": "2026-03-02T09:15:00+05:30",
+  "publishedAt": "2026-03-02T09:15:00+05:30"
+}

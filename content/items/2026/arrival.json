@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "arrival",
+  "slug": "arrival",
+  "type": "movie",
+  "provider": "web",
+  "title": "Arrival",
+  "creator": "Denis Villeneuve",
+  "description": "A linguist is recruited to communicate with newly-arrived extraterrestrials.",
+  "note": "A film about grammar that made me cry. The twist isn't the aliens — it's what learning their language does to how she experiences time.",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://letterboxd.com/film/arrival-2016/",
+    "canonicalUrl": "https://letterboxd.com/film/arrival-2016"
+  },
+  "metadata": { "year": 2016, "runtime": 116 },
+  "tags": ["sci-fi", "language"],
+  "moods": ["melancholy", "cerebral"],
+  "collections": ["broke-my-brain", "memory-erase"],
+  "featured": true,
+  "visibility": "published",
+  "discoveredAt": "2026-01-18T21:00:00+05:30",
+  "createdAt": "2026-01-18T21:00:00+05:30",
+  "updatedAt": "2026-01-18T21:00:00+05:30",
+  "publishedAt": "2026-01-18T21:00:00+05:30"
+}

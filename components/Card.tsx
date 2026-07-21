@@ -1,0 +1,75 @@
+import Link from "next/link";
+import Image from "next/image";
+import type { ContentItem } from "@/lib/content/types";
+import { getContentType } from "@/lib/content/registry/content-types";
+import { getProvider } from "@/lib/content/registry/providers";
+import styles from "./Card.module.css";
+
+/**
+ * The one card composition every listing uses (spec §11.1). Types/providers
+ * supply visual tokens (icon, aspect ratio) but never replace the base layout.
+ * Server component — no interactivity beyond the link.
+ */
+export function Card({ item }: { item: ContentItem }) {
+  const type = getContentType(item.type);
+  const provider = getProvider(item.provider);
+  const notePreview = item.noteFormat === "markdown" ? stripMarkdown(item.note) : item.note;
+
+  return (
+    <article
+      className={styles.card}
+      style={{ "--card-aspect": type.defaultAspectRatio } as React.CSSProperties}
+    >
+      <Link href={`/item/${item.slug}`} className={styles.link} aria-label={item.title}>
+        <div className={styles.art}>
+          {item.artwork ? (
+            <Image
+              src={item.artwork.src}
+              alt={item.artwork.alt}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
+              style={{ objectFit: "cover" }}
+            />
+          ) : (
+            <div className={styles.fallback} aria-hidden>
+              {type.icon}
+            </div>
+          )}
+          <div className={styles.badges}>
+            <span className={styles.badge}>{type.label}</span>
+            {provider && provider.id !== "manual" && (
+              <span className={styles.badge}>{provider.displayName}</span>
+            )}
+          </div>
+        </div>
+
+        <div className={styles.body}>
+          <h3 className={styles.title}>{item.title}</h3>
+          {(item.creator || item.subtitle) && (
+            <p className={styles.creator}>{item.creator ?? item.subtitle}</p>
+          )}
+          {notePreview && <p className={styles.note}>{notePreview}</p>}
+          {item.tags.length > 0 && (
+            <div className={styles.tags}>
+              {item.tags.slice(0, 3).map((tag) => (
+                <span key={tag} className={styles.tag}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+/** Cheap markdown-to-text for the card preview; the full render is sanitized elsewhere. */
+function stripMarkdown(md?: string): string | undefined {
+  if (!md) return undefined;
+  return md
+    .replace(/[*_`>#-]/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}

@@ -1,0 +1,14 @@
+[
+  { "id": "radiohead", "label": "Radiohead" },
+  { "id": "electronic", "label": "Electronic" },
+  { "id": "sci-fi", "label": "Sci-fi" },
+  { "id": "language", "label": "Language" },
+  { "id": "documentary", "label": "Documentary" },
+  { "id": "psychology", "label": "Psychology" },
+  { "id": "fantasy", "label": "Fantasy" },
+  { "id": "solitude", "label": "Solitude" },
+  { "id": "exploration", "label": "Exploration" },
+  { "id": "mystery", "label": "Mystery" },
+  { "id": "films", "label": "Films" },
+  { "id": "memory", "label": "Memory" }
+]
