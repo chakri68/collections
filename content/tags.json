@@ -10,5 +10,11 @@
   { "id": "exploration", "label": "Exploration" },
   { "id": "mystery", "label": "Mystery" },
   { "id": "films", "label": "Films" },
-  { "id": "memory", "label": "Memory" }
+  { "id": "memory", "label": "Memory" },
+  { "id": "interactive", "label": "Interactive" },
+  { "id": "explainer", "label": "Explainer" },
+  { "id": "physics", "label": "Physics" },
+  { "id": "music", "label": "Music" },
+  { "id": "data", "label": "Data" },
+  { "id": "discovery", "label": "Discovery" }
 ]

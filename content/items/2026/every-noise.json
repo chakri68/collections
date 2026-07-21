@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "every-noise",
+  "slug": "every-noise-at-once",
+  "type": "website",
+  "provider": "web",
+  "title": "Every Noise at Once",
+  "creator": "everynoise.com",
+  "description": "A scannable map of ~6,000 music genres, each a clickable audio sample.",
+  "note": "A single page that plots *every* genre Spotify has a name for onto one scatter map — down and left is denser and more atmospheric, up and right is spikier and bouncier.\n\nClick anything and it plays. `wonky`, `escape room`, `vapor twitch`, `deep discofox` — genres you didn't know had names, arranged so neighbours actually sound like neighbours.\n\n> The whole thing is one guy's side project running off Spotify's audio-analysis data.\n\nI've lost whole evenings just wandering it.",
+  "noteFormat": "markdown",
+  "source": {
+    "url": "https://everynoise.com",
+    "canonicalUrl": "https://everynoise.com"
+  },
+  "tags": ["music", "data", "discovery"],
+  "moods": ["cerebral"],
+  "collections": ["cool-websites"],
+  "visibility": "published",
+  "discoveredAt": "2026-04-09T22:00:00+05:30",
+  "createdAt": "2026-04-09T22:00:00+05:30",
+  "updatedAt": "2026-04-09T22:00:00+05:30",
+  "publishedAt": "2026-04-09T22:00:00+05:30"
+}

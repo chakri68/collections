@@ -36,9 +36,21 @@ const DRAFT_PREFIX = "collection:capture-draft:";
 const csv = (arr?: string[]) => (arr ?? []).join(", ");
 const parseCsv = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean);
 
+/**
+ * A distinct draft slot per capture context. Keying every new capture as "new"
+ * let an old blank draft clobber a fresh share (e.g. a Spotify link inheriting a
+ * previous note's type). Keying by the shared URL/text isolates them and still
+ * restores the right draft when the same thing is shared again.
+ */
+function shareSignature(share?: { url?: string; text?: string }): string {
+  if (share?.url) return `url:${share.url}`;
+  if (share?.text) return `text:${share.text.slice(0, 80)}`;
+  return "blank";
+}
+
 export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare, types, moods, collections }: CaptureFormProps) {
   const router = useRouter();
-  const draftId = editingId ?? "new";
+  const draftId = editingId ?? shareSignature(rawShare);
   const draftKey = DRAFT_PREFIX + draftId;
 
   // One idempotency key per form instance — retries of the same submission

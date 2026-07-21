@@ -31,5 +31,14 @@
     "description": "Notes that aren't about anything but themselves.",
     "visibility": "published",
     "rank": 4
+  },
+  {
+    "id": "cool-websites",
+    "slug": "cool-websites",
+    "title": "Cool websites",
+    "description": "Corners of the web worth keeping a bookmark to.",
+    "order": ["ciechanowski", "every-noise"],
+    "visibility": "published",
+    "rank": 2
   }
 ]
