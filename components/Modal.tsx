@@ -25,13 +25,17 @@ export function Modal({ children }: { children: React.ReactNode }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const [closing, setClosing] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Synchronous guard: a ref flips immediately, so a repeated close() (double
+  // click, Escape-then-click, or a concurrent re-render) can't schedule a second
+  // router.back(). The side effect stays OUT of the state updater, which must be
+  // pure — putting it there let React re-run it and fire back() twice.
+  const closingRef = useRef(false);
 
   const close = useCallback(() => {
-    setClosing((already) => {
-      if (already) return already;
-      closeTimer.current = setTimeout(() => router.back(), EXIT_MS);
-      return true;
-    });
+    if (closingRef.current) return;
+    closingRef.current = true;
+    setClosing(true);
+    closeTimer.current = setTimeout(() => router.back(), EXIT_MS);
   }, [router]);
 
   useEffect(() => {
