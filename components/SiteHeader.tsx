@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 import { OwnerControls } from "./owner/OwnerControls";
 import styles from "./SiteHeader.module.css";
@@ -26,23 +26,41 @@ export function SiteHeader({ types }: { types: NavType[] }) {
         COLLECTION
       </Link>
       <nav className={styles.nav} aria-label="Sections">
-        <Link href="/everything" className={`${styles.link} ${is("/everything") ? styles.active : ""}`}>
+        <NavLink href="/everything" active={is("/everything")}>
           Everything
-        </Link>
+        </NavLink>
         {types.map((t) => {
           const href = `/type/${t.id}`;
           return (
-            <Link
-              key={t.id}
-              href={href}
-              className={`${styles.link} ${is(href) ? styles.active : ""}`}
-            >
+            <NavLink key={t.id} href={href} active={is(href)}>
               {t.pluralLabel}
-            </Link>
+            </NavLink>
           );
         })}
       </nav>
       <OwnerControls />
     </header>
   );
+}
+
+function NavLink({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
+  return (
+    <Link href={href} className={`${styles.link} ${active ? styles.active : ""}`}>
+      {children}
+      <NavPending />
+    </Link>
+  );
+}
+
+/**
+ * Tab loading state. These routes are static and prefetched, so most clicks skip
+ * the pending phase entirely — this is for the cold ones, where the tab would
+ * otherwise look inert until the new screen arrives.
+ *
+ * Absolutely positioned and opacity-toggled: an indicator that took up space
+ * would nudge the whole nav sideways the moment you clicked it.
+ */
+function NavPending() {
+  const { pending } = useLinkStatus();
+  return <span aria-hidden className={`${styles.pending} ${pending ? styles.pendingOn : ""}`} />;
 }

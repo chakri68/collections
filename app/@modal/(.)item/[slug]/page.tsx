@@ -1,4 +1,5 @@
 import { ItemDetail } from "@/components/ItemDetail";
+import styles from "./reveal.module.css";
 
 type Params = { slug: string };
 
@@ -13,5 +14,9 @@ type Params = { slug: string };
  */
 export default async function InterceptedItem({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  return <ItemDetail slug={slug} />;
+  return (
+    <div className={styles.reveal}>
+      <ItemDetail slug={slug} />
+    </div>
+  );
 }

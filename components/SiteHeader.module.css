@@ -26,6 +26,7 @@
   display: none;
 }
 .link {
+  position: relative;
   padding: 5px 9px;
   border-radius: 6px;
   font-size: 12px;
@@ -33,6 +34,45 @@
   white-space: nowrap;
   border: 1px solid transparent;
   transition: color 0.12s, border-color 0.12s;
+}
+
+/* Indeterminate bar under the tab while its route loads (see NavPending). */
+.pending {
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  bottom: 2px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0;
+  transform-origin: left;
+}
+.pendingOn {
+  opacity: 1;
+  animation: nav-pending 0.9s ease-in-out infinite;
+}
+@keyframes nav-pending {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  51% {
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pendingOn {
+    animation: none;
+    transform: scaleX(1);
+  }
 }
 .link:hover {
   color: var(--text);

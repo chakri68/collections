@@ -40,7 +40,9 @@ export async function ItemDetail({ slug }: { slug: string }) {
         {item.artwork && (
           <div
             className={styles.art}
-            style={{ "--art-aspect": type.defaultAspectRatio } as React.CSSProperties}
+            style={
+              { "--art-aspect": type.defaultAspectRatio } as React.CSSProperties
+            }
           >
             <Image
               src={item.artwork.src}
@@ -65,15 +67,22 @@ export async function ItemDetail({ slug }: { slug: string }) {
           {item.creator && <p className={styles.creator}>{item.creator}</p>}
           {item.subtitle && <p className={styles.subtitle}>{item.subtitle}</p>}
 
-          <div className={styles.actions}>
-            {embed ? (
-              <span className={styles.embedHint}>Playable below</span>
-            ) : openUrl ? (
-              <a className="btn primary" href={openUrl} target="_blank" rel="noopener noreferrer">
-                ↗ Open original
-              </a>
-            ) : null}
-          </div>
+          {(embed || openUrl) && (
+            <div className={styles.actions}>
+              {embed ? (
+                <span className={styles.embedHint}>Playable below</span>
+              ) : openUrl ? (
+                <a
+                  className="btn primary"
+                  href={openUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  ↗ Open original
+                </a>
+              ) : null}
+            </div>
+          )}
         </div>
       </div>
 
@@ -93,7 +102,9 @@ export async function ItemDetail({ slug }: { slug: string }) {
         </div>
       )}
 
-      {(metaEntries.length > 0 || item.tags.length > 0 || item.moods.length > 0) && (
+      {(metaEntries.length > 0 ||
+        item.tags.length > 0 ||
+        item.moods.length > 0) && (
         <dl className={styles.meta}>
           {metaEntries.map(([k, v]) => (
             <div key={k} className={styles.metaRow}>

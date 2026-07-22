@@ -1,0 +1,33 @@
+/**
+ * The skeleton → entry handoff.
+ *
+ * Deliberately a plain CSS animation and not a <ViewTransition> around the
+ * Suspense boundary: that does cross-fade the two, but adding a transition
+ * boundary inside the modal makes React run a view transition for the whole
+ * navigation, and the content well behind the modal starts replaying its
+ * enter/exit again. Measured — a wrapped boundary put screen-out/screen-in back
+ * on every slow modal open. Not worth a nicer fade.
+ *
+ * The skeleton is shape-matched to the entry header, so easing the content in
+ * from just below reads as the placeholder resolving rather than swapping.
+ */
+.reveal {
+  animation: entry-reveal 260ms ease-out both;
+}
+
+@keyframes entry-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}

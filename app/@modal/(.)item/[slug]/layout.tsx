@@ -9,5 +9,7 @@ import { Modal } from "@/components/Modal";
  * open animation when the content arrived.
  */
 export default function InterceptedItemLayout({ children }: { children: React.ReactNode }) {
-  return <Modal>{children}</Modal>;
+  return (
+    <Modal>{children}</Modal>
+  );
 }
