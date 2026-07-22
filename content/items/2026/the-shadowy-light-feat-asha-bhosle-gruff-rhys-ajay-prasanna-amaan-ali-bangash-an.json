@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "the-shadowy-light-feat-asha-bhosle-gruff-rhys-ajay-prasanna-amaan-ali-bangash-an",
+  "slug": "the-shadowy-light-feat-asha-bhosle-gruff-rhys-ajay-prasanna-amaan-ali-bangash-an",
+  "type": "song",
+  "provider": "spotify",
+  "title": "The Shadowy Light (feat. Asha Bhosle, Gruff Rhys, Ajay Prasanna, Amaan Ali Bangash and Ayaan Ali Bangash)",
+  "subtitle": "Spotify",
+  "creator": "Gorillaz, Asha Bhosle, Gruff Rhys, Ajay Prasanna, Amaan Ali Bangash, Ayaan Ali Bangash",
+  "description": "Gorillaz, Asha Bhosle, Gruff Rhys, Ajay Prasanna, Amaan Ali Bangash, Ayaan Ali Bangash · The Mountain · Song · 2026",
+  "note": "Super cool sad song",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://open.spotify.com/track/1WHBtgrgSKDJd9Y8vHNZqH",
+    "canonicalUrl": "https://open.spotify.com/track/1WHBtgrgSKDJd9Y8vHNZqH",
+    "providerId": "track:1WHBtgrgSKDJd9Y8vHNZqH",
+    "embedUrl": "https://open.spotify.com/embed/track/1WHBtgrgSKDJd9Y8vHNZqH"
+  },
+  "artwork": {
+    "src": "https://i.scdn.co/image/ab67616d0000b273eeb01b41f48210d032d1b6a4",
+    "alt": "The Shadowy Light (feat. Asha Bhosle, Gruff Rhys, Ajay Prasanna, Amaan Ali Bangash and Ayaan Ali Bangash)"
+  },
+  "tags": [],
+  "moods": [
+    "cerebral",
+    "melancholy"
+  ],
+  "collections": [
+    "comfort"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-07-22T13:52:47.141Z",
+  "updatedAt": "2026-07-22T13:52:47.141Z",
+  "publishedAt": "2026-07-22T13:52:47.141Z"
+}
