@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { EmbedDescriptor } from "@/lib/content/types";
+import { SpotifyEmbed } from "./SpotifyEmbed";
 import styles from "./Embed.module.css";
 
 // Only provider-generated embed origins may render (spec §11.3 / §14).
@@ -19,14 +20,29 @@ function isAllowed(src: string): boolean {
   }
 }
 
-export function Embed({ embed, openUrl }: { embed: EmbedDescriptor; openUrl: string }) {
+export function Embed({
+  embed,
+  openUrl,
+}: {
+  embed: EmbedDescriptor;
+  openUrl: string;
+}) {
   const [active, setActive] = useState(false);
   const [failed, setFailed] = useState(false);
+  // The controller path degrades to the plain frame rather than to nothing —
+  // a blocked script shouldn't cost you the player.
+  const [noController, setNoController] = useState(false);
+  const dropController = useCallback(() => setNoController(true), []);
 
   if (!isAllowed(embed.src) || failed) {
     // Blocked or failed embed falls back to Open Original, never a broken frame.
     return (
-      <a className="btn primary" href={openUrl} target="_blank" rel="noopener noreferrer">
+      <a
+        className="btn primary"
+        href={openUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         ↗ Open original
       </a>
     );
@@ -49,6 +65,17 @@ export function Embed({ embed, openUrl }: { embed: EmbedDescriptor; openUrl: str
         <span className={styles.play}>▶</span>
         <span className={styles.posterLabel}>Play here</span>
       </button>
+    );
+  }
+
+  if (embed.controller?.kind === "spotify" && embed.height && !noController) {
+    return (
+      <SpotifyEmbed
+        url={embed.controller.url}
+        height={embed.height}
+        autoPlay
+        onUnavailable={dropController}
+      />
     );
   }
 

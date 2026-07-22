@@ -286,6 +286,13 @@ select:focus {
 ::view-transition-new(collection-modal) {
   animation: none;
 }
+/* …and above the anchored header. Snapshot groups stack by their own z-index,
+   not the page's, so without this the header's 100 beats the modal's 50 for
+   the length of the transition — the bar flashes over the panel and drops
+   back the moment the real DOM takes over. */
+::view-transition-group(collection-modal) {
+  z-index: 200;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

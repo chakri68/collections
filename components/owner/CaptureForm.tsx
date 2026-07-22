@@ -3,16 +3,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CaptureInput, SaveOutcome } from "@/lib/capture/types";
+import { TaxonomyField, type TaxonomyOption } from "./TaxonomyField";
 import styles from "./owner.module.css";
 
 export interface CapturePrefill extends Partial<CaptureInput> {
   artworkAlt?: string;
 }
 
-interface Option {
-  id: string;
-  label: string;
-}
+type Option = TaxonomyOption;
 
 interface CaptureFormProps {
   mode: "create" | "edit";
@@ -24,6 +22,7 @@ interface CaptureFormProps {
   types: Option[];
   moods: Option[];
   collections: Option[];
+  tags: Option[];
 }
 
 type Status =
@@ -33,8 +32,6 @@ type Status =
   | { kind: "error"; outcome: SaveOutcome | null; message: string };
 
 const DRAFT_PREFIX = "collection:capture-draft:";
-const csv = (arr?: string[]) => (arr ?? []).join(", ");
-const parseCsv = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean);
 
 /**
  * A distinct draft slot per capture context. Keying every new capture as "new"
@@ -48,7 +45,17 @@ function shareSignature(share?: { url?: string; text?: string }): string {
   return "blank";
 }
 
-export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare, types, moods, collections }: CaptureFormProps) {
+export function CaptureForm({
+  mode,
+  prefill,
+  editingId,
+  baseUpdatedAt,
+  rawShare,
+  types,
+  moods: initialMoods,
+  collections: initialCollections,
+  tags: initialTags,
+}: CaptureFormProps) {
   const router = useRouter();
   const draftId = editingId ?? shareSignature(rawShare);
   const draftKey = DRAFT_PREFIX + draftId;
@@ -63,10 +70,11 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
   );
 
   const [form, setForm] = useState<CaptureInput>(() => normalize(prefill));
-  // Tags are edited as raw text so a comma survives being typed. Parsing back to
-  // form.tags on every keystroke (via join/split) would strip the trailing
-  // comma the instant you type it, making a second tag impossible.
-  const [tagsText, setTagsText] = useState(() => csv(normalize(prefill).tags));
+  // The taxonomy lists arrive from the server render, but creating an entry
+  // mid-capture has to show up immediately — so they're state, seeded from props.
+  const [moods, setMoods] = useState(initialMoods);
+  const [collections, setCollections] = useState(initialCollections);
+  const [tags, setTags] = useState(initialTags);
   // Which fields were auto-filled by enrichment — so the owner knows to verify
   // them. Starts empty; only enrichment adds to it.
   const [inferred, setInferred] = useState<Set<string>>(new Set());
@@ -86,10 +94,8 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
       // desync hydration.
       if (saved) {
         const draft = JSON.parse(saved) as CaptureInput;
-        /* eslint-disable react-hooks/set-state-in-effect */
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setForm(draft);
-        setTagsText(csv(draft.tags));
-        /* eslint-enable react-hooks/set-state-in-effect */
       }
     } catch {}
   }, [mode, draftKey]);
@@ -152,6 +158,18 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
       const has = f[key].includes(id);
       return { ...f, [key]: has ? f[key].filter((x) => x !== id) : [...f[key], id] };
     });
+
+  /**
+   * A freshly committed taxonomy entry: list it, and select it — creating one
+   * mid-capture always means you want it on this item. Both steps are
+   * idempotent, so re-creating an existing name is a no-op rather than a dupe.
+   */
+  const adopt =
+    (key: "moods" | "collections" | "tags", setOptions: React.Dispatch<React.SetStateAction<Option[]>>) =>
+    (option: Option) => {
+      setOptions((prev) => (prev.some((o) => o.id === option.id) ? prev : [...prev, option]));
+      setForm((f) => (f[key].includes(option.id) ? f : { ...f, [key]: [...f[key], option.id] }));
+    };
 
   const canSubmit = form.title.trim().length > 0 && form.type && status.kind !== "saving";
 
@@ -238,11 +256,12 @@ export function CaptureForm({ mode, prefill, editingId, baseUpdatedAt, rawShare,
           </label>
         </label>
 
-        <FieldText label="Tags (comma separated)" value={tagsText}
-          onChange={(v) => { setTagsText(v); set("tags", parseCsv(v)); }} />
-
-        <ChipField label="Moods" options={moods} selected={form.moods} onToggle={(id) => toggleIn("moods", id)} />
-        <ChipField label="Collections" options={collections} selected={form.collections} onToggle={(id) => toggleIn("collections", id)} />
+        <TaxonomyField label="Tags" kind="tag" options={tags} selected={form.tags}
+          onToggle={(id) => toggleIn("tags", id)} onCreated={adopt("tags", setTags)} />
+        <TaxonomyField label="Moods" kind="mood" options={moods} selected={form.moods}
+          onToggle={(id) => toggleIn("moods", id)} onCreated={adopt("moods", setMoods)} />
+        <TaxonomyField label="Collections" kind="collection" options={collections} selected={form.collections}
+          onToggle={(id) => toggleIn("collections", id)} onCreated={adopt("collections", setCollections)} />
 
         {mode === "edit" && (
           <FieldText label="Source URL" value={form.source?.url ?? ""}
@@ -309,28 +328,6 @@ function FieldText({ label, value, onChange, inferred, autoFocus, required }: {
         className={inferred ? styles.inferred : undefined}
         onChange={(e) => onChange(e.target.value)} />
     </label>
-  );
-}
-
-function ChipField({ label, options, selected, onToggle }: {
-  label: string; options: Option[]; selected: string[]; onToggle: (id: string) => void;
-}) {
-  // Show known options plus any free-form ids already on the item.
-  const known = new Set(options.map((o) => o.id));
-  const extras = selected.filter((s) => !known.has(s)).map((id) => ({ id, label: id }));
-  const all = [...options, ...extras];
-  if (all.length === 0) return null;
-  return (
-    <div className={styles.field}>
-      <span className="label">{label}</span>
-      <div className={styles.suggest}>
-        {all.map((o) => (
-          <button type="button" key={o.id} className={`chip ${selected.includes(o.id) ? "on" : ""}`} onClick={() => onToggle(o.id)}>
-            {o.label}
-          </button>
-        ))}
-      </div>
-    </div>
   );
 }
 

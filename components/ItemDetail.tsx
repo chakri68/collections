@@ -34,12 +34,14 @@ export async function ItemDetail({ slug }: { slug: string }) {
 
   return (
     <div className={styles.detail}>
-      <div className={styles.top}>
-        <div
-          className={styles.art}
-          style={{ "--art-aspect": type.defaultAspectRatio } as React.CSSProperties}
-        >
-          {item.artwork ? (
+      {/* No artwork → no art column at all. A card in a grid needs the
+          placeholder to hold its shape; here it's a 300px square of nothing. */}
+      <div className={`${styles.top} ${item.artwork ? "" : styles.topBare}`}>
+        {item.artwork && (
+          <div
+            className={styles.art}
+            style={{ "--art-aspect": type.defaultAspectRatio } as React.CSSProperties}
+          >
             <Image
               src={item.artwork.src}
               alt={item.artwork.alt}
@@ -48,12 +50,8 @@ export async function ItemDetail({ slug }: { slug: string }) {
               style={{ objectFit: "cover" }}
               priority
             />
-          ) : (
-            <div className={styles.fallback} aria-hidden>
-              {type.icon}
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className={styles.head}>
           <div className={styles.badges}>

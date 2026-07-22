@@ -97,6 +97,104 @@
   margin-top: 6px;
 }
 
+/* ── Taxonomy picker (moods / collections / tags) ─────────────────────────── */
+.pickerHead {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.pickerCount {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.miniBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+.miniBtn:hover {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+}
+.picker {
+  position: relative;
+}
+/* Overlays the fields below instead of shoving them down as you type. */
+.results {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+}
+.result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+}
+.resultActive {
+  background: rgba(255, 176, 0, 0.1);
+}
+.resultOn {
+  color: var(--accent);
+}
+.resultMark {
+  color: var(--muted);
+  width: 1ch;
+}
+.resultOn .resultMark {
+  color: var(--accent);
+}
+.resultEmpty {
+  padding: 6px 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.newRow {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+.newRow input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  padding: 7px 9px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.newRow :global(.btn) {
+  white-space: nowrap;
+}
+
 .actions {
   display: flex;
   gap: 10px;

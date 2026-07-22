@@ -63,6 +63,17 @@ export interface ResolvedMetadata {
   inferredFields?: string[];
 }
 
+/**
+ * A player with a JS API, so the embed can be driven (play on our own click,
+ * torn down on unmount) instead of being a sealed iframe. Absent = plain frame.
+ */
+export type EmbedControllerDescriptor = {
+  kind: "spotify";
+  /** Canonical page URL — NOT the /embed/ one, which createController rejects
+   *  as an "Invalid URI". It derives the embed URL itself, keeping our params. */
+  url: string;
+};
+
 export interface EmbedDescriptor {
   /** Allowlisted, provider-generated embed origin + path. */
   src: string;
@@ -73,6 +84,7 @@ export interface EmbedDescriptor {
    *  as their own (white) background. */
   height?: number;
   allow?: string;
+  controller?: EmbedControllerDescriptor;
 }
 
 export interface ProviderAdapter {

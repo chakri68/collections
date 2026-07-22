@@ -21,10 +21,10 @@ export default async function Home() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={`${styles.heroTitle} pixel`}>A small museum</h1>
+        <h1 className={`${styles.heroTitle} pixel`}>A small collection</h1>
         <p className={styles.heroLead}>
-          Things worth keeping — songs, films, books, games, stray thoughts — and,
-          for each, the reason it was kept.
+          Things worth keeping — songs, films, books, games, stray thoughts —
+          and, for each, the reason it was kept.
         </p>
         <div className={styles.heroActions}>
           <Link href="/everything" className="btn primary">
@@ -35,7 +35,10 @@ export default async function Home() {
       </header>
 
       {feat.length > 0 && (
-        <Section title="Featured" subtitle="A rotating few that get to stand at the front.">
+        <Section
+          title="Featured"
+          subtitle="A rotating few that get to stand at the front."
+        >
           <Grid items={feat} />
         </Section>
       )}

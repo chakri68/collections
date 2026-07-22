@@ -6,7 +6,7 @@ import { SITE_URL } from "@/lib/site-config";
 import "./globals.css";
 
 const DESCRIPTION =
-  "A small personal museum of things worth keeping — and the reason each one was kept.";
+  "A small personal collection of things worth keeping — and the reason each one was kept.";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -34,7 +34,6 @@ export const metadata: Metadata = {
   applicationName: "Collection",
   keywords: [
     "collection",
-    "personal museum",
     "curated",
     "recommendations",
     "books",
@@ -65,7 +64,11 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
-  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Collection" },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Collection",
+  },
 };
 
 export const viewport: Viewport = {
@@ -78,7 +81,10 @@ export default function RootLayout({
   modal,
 }: Readonly<{ children: React.ReactNode; modal: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${jetbrainsMono.variable} ${pressStart.variable}`}>
+    <html
+      lang="en"
+      className={`${jetbrainsMono.variable} ${pressStart.variable}`}
+    >
       <body>
         <AppFrame>{children}</AppFrame>
         {modal}
@@ -89,6 +95,10 @@ export default function RootLayout({
           strategy="afterInteractive"
           data-cf-beacon='{"token": "d32f9ec67a08462284b59ccf606e7507"}'
         />
+        {/* The Spotify IFrame API is deliberately NOT loaded here. It fires its
+            ready hook exactly once, so whoever loads it must install the hook
+            first — lib/spotify-iframe-api.ts owns both, and only on the pages
+            that actually have a player. */}
       </body>
     </html>
   );

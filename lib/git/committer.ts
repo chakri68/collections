@@ -20,15 +20,38 @@ export interface CommitResult {
  * serverless deployment would swap in a committer that calls the Git provider
  * API with a repository-scoped token. Both honor the same contract, and neither
  * ever exposes a credential to the browser.
+ *
+ * `writeFile` is the primitive — items are one thing that gets written, the
+ * taxonomy index files (moods/tags/collections) are another.
  */
 export interface Committer {
+  /** Write a repo-relative file (POSIX path, inside content/) and commit it. */
+  writeFile(repoPath: string, text: string, message: string): Promise<CommitResult>;
   write(item: ContentItem, message: string): Promise<CommitResult>;
 }
 
-/** Relative repo path for an item, partitioned by discovery/creation year. */
+/** Repo-relative path for an item, partitioned by discovery/creation year. */
 export function itemFilePath(item: ContentItem): string {
   const year = (item.discoveredAt ?? item.createdAt).slice(0, 4);
-  return path.join("content", "items", /^\d{4}$/.test(year) ? year : "unsorted", `${item.slug}.json`);
+  return `content/items/${/^\d{4}$/.test(year) ? year : "unsorted"}/${item.slug}.json`;
+}
+
+/** JSON as it lands on disk: 2-space indent, trailing newline, tidy diffs. */
+export function serialize(value: unknown): string {
+  return JSON.stringify(value, null, 2) + "\n";
+}
+
+/**
+ * Writes are confined to the content tree. Nothing in the app builds a path
+ * from user input today, but the committer holds repo-write credentials — the
+ * blast radius of a future mistake is worth one guard.
+ */
+function contentPath(repoPath: string): string {
+  const normalized = path.posix.normalize(repoPath);
+  if (!normalized.startsWith("content/") || normalized.split("/").includes("..")) {
+    throw new Error(`refusing to write outside content/: ${repoPath}`);
+  }
+  return normalized;
 }
 
 async function isGitRepo(): Promise<boolean> {
@@ -41,15 +64,14 @@ async function isGitRepo(): Promise<boolean> {
 }
 
 export const localGitCommitter: Committer = {
-  async write(item, message): Promise<CommitResult> {
-    const rel = itemFilePath(item);
+  async writeFile(repoPath, text, message): Promise<CommitResult> {
+    const rel = contentPath(repoPath);
     const abs = path.join(REPO_ROOT, rel);
     await fs.mkdir(path.dirname(abs), { recursive: true });
-    // Trailing newline keeps the file POSIX-clean and diffs tidy.
-    await fs.writeFile(abs, JSON.stringify(item, null, 2) + "\n", "utf8");
+    await fs.writeFile(abs, text, "utf8");
 
     if (!(await isGitRepo())) {
-      return { commit: `nogit-${item.updatedAt}`, committed: false };
+      return { commit: `nogit-${rel}`, committed: false };
     }
 
     await exec("git", ["add", "--", rel], { cwd: REPO_ROOT });
@@ -63,6 +85,10 @@ export const localGitCommitter: Committer = {
     await exec("git", ["commit", "-m", message, "--", rel], { cwd: REPO_ROOT });
     const { stdout: sha } = await exec("git", ["rev-parse", "HEAD"], { cwd: REPO_ROOT });
     return { commit: sha.trim(), committed: true };
+  },
+
+  write(item, message) {
+    return localGitCommitter.writeFile(itemFilePath(item), serialize(item), message);
   },
 };
 
@@ -93,12 +119,12 @@ export function githubCommitter(config?: {
     "user-agent": "collection-committer",
   };
 
-  return {
-    async write(item, message): Promise<CommitResult> {
+  const committer: Committer = {
+    async writeFile(repoPath, text, message): Promise<CommitResult> {
       if (!token || !repo) throw new Error("github committer misconfigured: set GITHUB_TOKEN and GITHUB_REPO");
-      const rel = itemFilePath(item).split(path.sep).join("/"); // repo paths are always POSIX
+      const rel = contentPath(repoPath);
       const url = `${api}/repos/${repo}/contents/${rel.split("/").map(encodeURIComponent).join("/")}`;
-      const content = Buffer.from(JSON.stringify(item, null, 2) + "\n", "utf8").toString("base64");
+      const content = Buffer.from(text, "utf8").toString("base64");
 
       // An update needs the current blob SHA; a create must omit it. 404 = new file.
       let sha: string | undefined;
@@ -118,7 +144,12 @@ export function githubCommitter(config?: {
       const body = (await res.json()) as { commit?: { sha?: string } };
       return { commit: body.commit?.sha ?? "unknown", committed: true };
     },
+
+    write(item, message) {
+      return committer.writeFile(itemFilePath(item), serialize(item), message);
+    },
   };
+  return committer;
 }
 
 /**

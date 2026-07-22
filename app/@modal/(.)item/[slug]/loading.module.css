@@ -1,0 +1,79 @@
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+}
+.top {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 28px;
+  align-items: start;
+  margin-bottom: 20px;
+}
+@media (max-width: 720px) {
+  .top {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .art {
+    max-width: 260px;
+    justify-self: center;
+  }
+}
+
+.art {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-well);
+}
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+.badge {
+  width: 80px;
+  height: 18px;
+  border-radius: 999px;
+}
+.title {
+  width: 65%;
+  height: 24px;
+  border-radius: 6px;
+}
+.creator {
+  width: 35%;
+  height: 15px;
+  border-radius: 6px;
+}
+.line {
+  width: 100%;
+  height: 13px;
+  border-radius: 6px;
+}
+.short {
+  width: 45%;
+}
+
+/* One shared shimmer so every block breathes in step. */
+.pulse {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  animation: skeleton-pulse 1.1s ease-in-out infinite;
+}
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse {
+    animation: none;
+  }
+}

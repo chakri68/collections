@@ -22,6 +22,12 @@
   }
 }
 
+/* Artless entry (most notes): the head takes the whole width. */
+.topBare {
+  grid-template-columns: 1fr;
+  margin-bottom: 24px;
+}
+
 .art {
   position: relative;
   width: 100%;
@@ -34,16 +40,6 @@
 .art img {
   object-fit: cover;
 }
-.fallback {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: 64px;
-  color: var(--muted);
-  background: radial-gradient(circle at 50% 35%, #14130f, #060605 70%);
-}
-
 .head {
   display: flex;
   flex-direction: column;
@@ -98,15 +94,16 @@
 .meta {
   max-width: 640px;
   border-top: 1px solid var(--border);
-  padding-top: 18px;
+  border-bottom: 1px solid var(--border);
+  padding: 4px 0 4px 0;
   margin-bottom: 40px;
 }
 .metaRow {
   display: grid;
+  align-items: center;
   grid-template-columns: 120px 1fr;
   gap: 12px;
   padding: 7px 0;
-  border-bottom: 1px solid var(--border);
 }
 .metaRow dd {
   font-size: 13px;

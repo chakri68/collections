@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { ContentItem } from "@/lib/content/types";
 import { getContentType } from "@/lib/content/registry/content-types";
 import { getProvider } from "@/lib/content/registry/providers";
+import { CardPending } from "./CardPending";
 import styles from "./Card.module.css";
 
 /**
@@ -19,7 +20,14 @@ export function Card({ item }: { item: ContentItem }) {
     // Grid cards are uniform: one art aspect for every type (the type-specific
     // ratio lives on the detail view). Keeps the grid tidy instead of ragged.
     <article className={styles.card}>
-      <Link href={`/item/${item.slug}`} className={styles.link} aria-label={item.title}>
+      {/* transitionTypes tags this navigation so AppFrame's boundary can sit it
+          out — this opens a modal over the grid, it doesn't replace the grid. */}
+      <Link
+        href={`/item/${item.slug}`}
+        transitionTypes={["modal"]}
+        className={styles.link}
+        aria-label={item.title}
+      >
         <div className={styles.art}>
           {item.artwork ? (
             <Image
@@ -40,6 +48,7 @@ export function Card({ item }: { item: ContentItem }) {
               <span className={styles.badge}>{provider.displayName}</span>
             )}
           </div>
+          <CardPending />
         </div>
 
         <div className={styles.body}>

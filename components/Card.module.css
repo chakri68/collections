@@ -5,7 +5,9 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   overflow: hidden;
-  transition: border-color 0.12s, transform 0.12s;
+  transition:
+    border-color 0.12s,
+    transform 0.12s;
 }
 .card:hover {
   border-color: var(--accent-dim);
@@ -32,6 +34,7 @@
 /* Type-specific visual fallback when there's no artwork. */
 .fallback {
   position: absolute;
+  padding-top: 36px;
   inset: 0;
   display: grid;
   place-items: center;
@@ -46,6 +49,41 @@
   left: 8px;
   display: flex;
   gap: 6px;
+}
+
+/* Pending overlay — see CardPending.tsx. Always in the tree, opacity-toggled,
+   so lighting it up can't move anything. */
+.pending {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease-out;
+}
+.pendingOn {
+  opacity: 1;
+}
+.pendingRing {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  animation: card-spin 0.6s linear infinite;
+}
+@keyframes card-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pendingRing {
+    animation: none;
+    border-color: var(--accent);
+  }
 }
 .badge {
   font-size: 10px;

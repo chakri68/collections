@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   display: grid;
+  align-content: center;
   place-items: center;
   gap: 10px;
   background: radial-gradient(circle at 50% 40%, #14130f, #060605 70%);
@@ -9,7 +10,9 @@
   border-radius: var(--radius-card);
   color: var(--muted);
   cursor: pointer;
-  transition: border-color 0.12s, color 0.12s;
+  transition:
+    border-color 0.12s,
+    color 0.12s;
 }
 .poster:hover {
   border-color: var(--accent);
@@ -26,8 +29,9 @@
   letter-spacing: 0.08em;
 }
 .frame {
+  position: relative;
   width: 100%;
-  border-radius: var(--radius-card);
+  border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
   /* Dark under the iframe so there's no white flash before the embed paints. */
@@ -39,4 +43,28 @@
   border: 0;
   display: block;
   color-scheme: dark;
+}
+
+/* Spotify swaps this node for its own iframe, so it can't carry layout of its
+   own — .frame holds the box, this just fills it. */
+.controllerHost {
+  width: 100%;
+  height: 100%;
+}
+/* The player wants its exact layout height (352 for a track). Under the global
+   border-box the 1px frame border would eat into that, leaving the iframe 2px
+   short of its own content and scrolling it. Put the border outside instead. */
+.controllerFrame {
+  box-sizing: content-box;
+}
+.embedLoading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  pointer-events: none;
 }

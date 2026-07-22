@@ -13,7 +13,12 @@
   animation: modal-fade 0.16s ease-out;
 }
 
+/* Centered when the entry is short, top-aligned when it's taller than the
+   viewport. Auto margins do both: in grid they absorb the free space (centering
+   it), and when there isn't any they resolve to zero instead of overflowing —
+   so a long entry never has its top pushed out of reach above the scroll. */
 .panel {
+  margin: auto 0;
   position: relative;
   width: min(880px, 100%);
   background: var(--panel);

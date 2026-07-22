@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { addTransitionType, startTransition, useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Modal.module.css";
 
@@ -35,7 +35,16 @@ export function Modal({ children }: { children: React.ReactNode }) {
     if (closingRef.current) return;
     closingRef.current = true;
     setClosing(true);
-    closeTimer.current = setTimeout(() => router.back(), EXIT_MS);
+    closeTimer.current = setTimeout(() => {
+      // Tag the pop the same way Card tags the push, so the content well sits
+      // this transition out too (see AppFrame). `<Link transitionTypes>` covers
+      // the open direction; back() has no equivalent, so mark it by hand —
+      // addTransitionType only counts inside a transition scope.
+      startTransition(() => {
+        addTransitionType("modal");
+        router.back();
+      });
+    }, EXIT_MS);
   }, [router]);
 
   useEffect(() => {

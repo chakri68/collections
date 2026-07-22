@@ -54,6 +54,7 @@ export default async function EditPage({ params }: { params: Promise<{ slug: str
         types={allContentTypes().map((t) => ({ id: t.id, label: t.label }))}
         moods={snapshot.moods.map((m) => ({ id: m.id, label: m.label }))}
         collections={snapshot.collections.map((c) => ({ id: c.id, label: c.title }))}
+        tags={snapshot.tags.map((t) => ({ id: t.id, label: t.label }))}
       />
     </div>
   );
