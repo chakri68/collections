@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "voodoo-sonic-album-by-parov-stelar-spotify",
+  "slug": "voodoo-sonic-album-by-parov-stelar-spotify",
+  "type": "album",
+  "provider": "spotify",
+  "title": "Voodoo Sonic - Album by Parov Stelar | Spotify",
+  "subtitle": "Spotify",
+  "creator": "Parov Stelar",
+  "description": "Parov Stelar · album · 2020 · 18 songs",
+  "note": "Oh it's Voodoo Sonic, just the literal peak of electro-swing 🕺 Always makes me wanna just jump to the beats ",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://open.spotify.com/album/45z4E9GyyxGbXpkhtYglEw",
+    "canonicalUrl": "https://open.spotify.com/album/45z4E9GyyxGbXpkhtYglEw",
+    "providerId": "album:45z4E9GyyxGbXpkhtYglEw",
+    "embedUrl": "https://open.spotify.com/embed/album/45z4E9GyyxGbXpkhtYglEw"
+  },
+  "artwork": {
+    "src": "https://i.scdn.co/image/ab67616d0000b27332c7f9e0bf96522584198075",
+    "alt": "Voodoo Sonic - Album by Parov Stelar | Spotify"
+  },
+  "tags": [],
+  "moods": [],
+  "collections": [
+    "memory-erase",
+    "comfort",
+    "broke-my-brain"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-07-22T16:12:42.574Z",
+  "updatedAt": "2026-07-22T16:12:42.574Z",
+  "publishedAt": "2026-07-22T16:12:42.574Z"
+}
