@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "the-wiki-game-wikipedia-game-explore-wikipedia",
+  "slug": "the-wiki-game-wikipedia-game-explore-wikipedia",
+  "type": "website",
+  "provider": "web",
+  "title": "The Wiki Game - Wikipedia Game - Explore Wikipedia!",
+  "description": "A game of exploring and racing through Wikipedia articles! Fun and surprise await as you go down the",
+  "source": {
+    "url": "https://www.thewikigame.com/",
+    "canonicalUrl": "https://www.thewikigame.com/"
+  },
+  "tags": [],
+  "moods": [],
+  "collections": [],
+  "visibility": "published",
+  "createdAt": "2026-07-22T13:57:29.902Z",
+  "updatedAt": "2026-07-22T13:57:29.902Z",
+  "publishedAt": "2026-07-22T13:57:29.902Z"
+}
