@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "be-more",
+  "slug": "be-more",
+  "type": "song",
+  "provider": "spotify",
+  "title": "Be More",
+  "subtitle": "Spotify",
+  "creator": "Stephen Sanchez",
+  "description": "Stephen Sanchez · Angel Face · Song · 2023",
+  "note": "I discovered Stephen when I needed him most in college lmao - his 80s esque songs about love iykyk",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://open.spotify.com/track/306H2K5MwE0Z6jJj0jEuar",
+    "canonicalUrl": "https://open.spotify.com/track/306H2K5MwE0Z6jJj0jEuar",
+    "providerId": "track:306H2K5MwE0Z6jJj0jEuar",
+    "embedUrl": "https://open.spotify.com/embed/track/306H2K5MwE0Z6jJj0jEuar"
+  },
+  "artwork": {
+    "src": "https://i.scdn.co/image/ab67616d0000b273199b850d4877866cf7e318d1",
+    "alt": "Be More"
+  },
+  "tags": [
+    "classics",
+    "college"
+  ],
+  "moods": [
+    "melancholy",
+    "nostalgic"
+  ],
+  "collections": [],
+  "visibility": "published",
+  "createdAt": "2026-07-22T16:08:45.544Z",
+  "updatedAt": "2026-07-22T16:08:45.544Z",
+  "publishedAt": "2026-07-22T16:08:45.544Z"
+}
