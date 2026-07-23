@@ -36,6 +36,11 @@ export function Card({ item }: { item: ContentItem }) {
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
               style={{ objectFit: "cover" }}
+              // Mirrored artwork (/artwork/…) goes through the optimizer; a
+              // not-yet-mirrored remote URL renders as-is — the optimizer's
+              // host allowlist would otherwise crash the page on any host it
+              // doesn't know (items saved before mirroring existed).
+              unoptimized={!item.artwork.src.startsWith("/")}
             />
           ) : (
             <div className={styles.fallback} aria-hidden>

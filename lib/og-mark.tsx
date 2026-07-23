@@ -94,13 +94,19 @@ export async function loadMono(): Promise<
   { name: string; data: ArrayBuffer; weight: 700; style: "normal" }[] | undefined
 > {
   try {
-    const css = await fetch(
+    const cssRes = await fetch(
       "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700",
       { headers: { "User-Agent": "Mozilla/5.0 (Windows NT 6.1)" } },
-    ).then((r) => r.text());
+    );
+    if (!cssRes.ok) return undefined;
+    const css = await cssRes.text();
     const url = css.match(/src:\s*url\((https:\/\/[^)]+\.(?:ttf|otf))\)/)?.[1];
     if (!url) return undefined;
-    const data = await fetch(url).then((r) => r.arrayBuffer());
+    // A rate-limit/error page here would reach satori as "font data" and blow
+    // up the render outside this try — reject anything that isn't a font.
+    const fontRes = await fetch(url);
+    if (!fontRes.ok || /html/.test(fontRes.headers.get("content-type") ?? "")) return undefined;
+    const data = await fontRes.arrayBuffer();
     return [{ name: "JetBrains Mono", data, weight: 700, style: "normal" }];
   } catch {
     return undefined;

@@ -256,6 +256,9 @@ export function CaptureForm({
           </label>
         </label>
 
+        <ArtworkField artwork={form.artwork} title={form.title} inferred={inferred.has("artwork")}
+          onChange={(a) => set("artwork", a)} />
+
         <TaxonomyField label="Tags" kind="tag" options={tags} selected={form.tags}
           onToggle={(id) => toggleIn("tags", id)} onCreated={adopt("tags", setTags)} />
         <TaxonomyField label="Moods" kind="mood" options={moods} selected={form.moods}
@@ -328,6 +331,72 @@ function FieldText({ label, value, onChange, inferred, autoFocus, required }: {
         className={inferred ? styles.inferred : undefined}
         onChange={(e) => onChange(e.target.value)} />
     </label>
+  );
+}
+
+/**
+ * Artwork input, both modes. Whatever ends up here — a pasted URL, an enriched
+ * og-image, or an uploaded file (sent as a data: URL) — the server mirrors into
+ * content/images on save, so the stored item never depends on a link that can
+ * expire.
+ */
+function ArtworkField({ artwork, title, inferred, onChange }: {
+  artwork: CaptureInput["artwork"];
+  title: string;
+  inferred?: boolean;
+  onChange: (a: CaptureInput["artwork"]) => void;
+}) {
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const src = artwork?.src ?? "";
+  const uploaded = src.startsWith("data:");
+
+  const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // so re-picking the same file fires change again
+    if (!file) return;
+    setUploadError(null);
+    try {
+      onChange({ src: await readImageFile(file), alt: artwork?.alt || title });
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "couldn't read that image");
+    }
+  };
+
+  return (
+    <div className={styles.field}>
+      <span className="label">
+        Image {inferred && <span className={styles.inferredTag}>· inferred</span>}
+        {uploaded && <span className={styles.inferredTag}>· upload — stored in the repo on save</span>}
+      </span>
+      <input
+        type="url"
+        inputMode="url"
+        value={uploaded ? "" : src}
+        placeholder={uploaded ? "using the uploaded file — paste a URL to replace it" : "https://…  (cover art / og-image — copied into the repo on save)"}
+        aria-label="Image URL"
+        className={inferred ? styles.inferred : undefined}
+        onChange={(e) => {
+          const url = e.target.value;
+          // Fresh object, not a spread: a new image must not inherit the old
+          // one's width/height/blurhash.
+          onChange(url ? { src: url, alt: artwork?.alt ?? title } : undefined);
+        }}
+      />
+      {artwork && (
+        <input type="text" value={artwork.alt} placeholder="Alt text" aria-label="Image alt text"
+          style={{ marginTop: 6 }} onChange={(e) => onChange({ ...artwork, alt: e.target.value })} />
+      )}
+      <div className={styles.row} style={{ marginTop: 6, alignItems: "center" }}>
+        <input type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+          aria-label="Upload an image" onChange={pick} />
+        {artwork && (
+          <button type="button" className="btn" onClick={() => { setUploadError(null); onChange(undefined); }}>
+            Remove
+          </button>
+        )}
+      </div>
+      {uploadError && <span className={styles.inferredTag}>{uploadError}</span>}
+    </div>
   );
 }
 
@@ -412,6 +481,59 @@ function normalize(p: CapturePrefill): CaptureInput {
     visibility: p.visibility ?? "published",
     discoveredAt: p.discoveredAt,
   };
+}
+
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+const KEEP_ORIGINAL_BYTES = 300 * 1024;
+const MAX_EDGE = 1600;
+// ~4 MB of binary once base64-decoded — mirrors the server cap in lib/capture/artwork.ts.
+const MAX_DATA_URL_CHARS = 5_400_000;
+
+function fileToDataUrl(file: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("couldn't read the file"));
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * An upload travels to the server as a data: URL inside the JSON save payload,
+ * so big files get downscaled here first. Small files pass through untouched;
+ * GIFs skip the canvas (a canvas frame would freeze the animation).
+ */
+async function readImageFile(file: File): Promise<string> {
+  if (file.size <= KEEP_ORIGINAL_BYTES) return fileToDataUrl(file);
+  if (file.type === "image/gif") {
+    if (file.size <= MAX_UPLOAD_BYTES) return fileToDataUrl(file);
+    throw new Error("GIF too large — 4 MB max");
+  }
+  let out: string;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    // The server stores WebP, so encode WebP here when the browser can — a
+    // jpeg intermediate would add a second lossy generation. A browser that
+    // can't encode it returns PNG from toDataURL (detectable by prefix); then
+    // keep PNG for transparency or fall back to JPEG, and let the server
+    // convert. Anything still over the cap gets one JPEG retry.
+    const webp = canvas.toDataURL("image/webp", 0.85);
+    out = webp.startsWith("data:image/webp")
+      ? webp
+      : file.type === "image/png" ? canvas.toDataURL("image/png") : canvas.toDataURL("image/jpeg", 0.85);
+    if (out.length > MAX_DATA_URL_CHARS) out = canvas.toDataURL("image/jpeg", 0.85);
+  } catch {
+    // Undecodable (or canvas unavailable): send the original if it fits.
+    out = await fileToDataUrl(file);
+  }
+  if (out.length > MAX_DATA_URL_CHARS) throw new Error("image too large — 4 MB max");
+  return out;
 }
 
 // "note"/"website" are the unset defaults a blank capture starts on; a detected

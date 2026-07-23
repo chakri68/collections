@@ -82,7 +82,7 @@ function toRepoPath(abs: string): string {
 
 const GH_API = "https://api.github.com";
 
-function ghHeaders(raw = false): HeadersInit {
+export function ghHeaders(raw = false): HeadersInit {
   const token = process.env.GITHUB_TOKEN;
   return {
     accept: raw ? "application/vnd.github.raw" : "application/vnd.github+json",

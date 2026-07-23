@@ -16,7 +16,9 @@ export const captureInputSchema = z.object({
   note: z.string().max(8000).optional(),
   noteFormat: z.enum(NOTE_FORMAT).optional(),
   source: sourceSchema.optional(),
-  artwork: artworkSchema.optional(),
+  // src may be a URL or an uploaded data: image; the cap bounds the base64
+  // form of the 4 MB server-side image limit (lib/capture/artwork.ts).
+  artwork: artworkSchema.extend({ src: z.string().max(6_000_000) }).optional(),
   metadata: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.array(z.string()), z.null()])).optional(),
   tags: z.array(z.string().max(60)).max(30).default([]),
   moods: z.array(z.string().max(60)).max(20).default([]),

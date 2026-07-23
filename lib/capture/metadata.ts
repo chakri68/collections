@@ -63,7 +63,12 @@ async function assertSafeUrl(raw: string): Promise<URL> {
   return url;
 }
 
-async function safeFetchHtml(startUrl: string): Promise<{ url: string; html: string } | null> {
+/**
+ * SSRF-guarded GET: validates every redirect hop, hard timeout. Returns the
+ * final OK response plus the URL it landed on, or null. Shared by the HTML
+ * scrape here and the artwork mirror (./artwork.ts).
+ */
+export async function safeGet(startUrl: string, accept: string): Promise<{ url: string; res: Response } | null> {
   let current = startUrl;
   for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
     await assertSafeUrl(current); // re-validate EVERY hop
@@ -76,7 +81,7 @@ async function safeFetchHtml(startUrl: string): Promise<{ url: string; html: str
         method: "GET",
         redirect: "manual",
         signal: controller.signal,
-        headers: { accept: "text/html,application/xhtml+xml", "user-agent": "CollectionBot/1.0" },
+        headers: { accept, "user-agent": "CollectionBot/1.0" },
       });
     } finally {
       clearTimeout(timer);
@@ -89,29 +94,50 @@ async function safeFetchHtml(startUrl: string): Promise<{ url: string; html: str
       continue;
     }
     if (!res.ok) return null;
-
-    const type = res.headers.get("content-type") ?? "";
-    if (!type.includes("html") && !type.includes("xml")) return null;
-
-    // Read with a byte cap so a giant response can't exhaust memory.
-    const reader = res.body?.getReader();
-    if (!reader) return null;
-    const chunks: Uint8Array[] = [];
-    let total = 0;
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      total += value.length;
-      if (total > MAX_BYTES) {
-        chunks.push(value.slice(0, value.length - (total - MAX_BYTES)));
-        await reader.cancel();
-        break;
-      }
-      chunks.push(value);
-    }
-    return { url: current, html: Buffer.concat(chunks).toString("utf8") };
+    return { url: current, res };
   }
   return null; // too many redirects
+}
+
+/**
+ * Read a body with a byte cap so a giant response can't exhaust memory.
+ * `overflow: "truncate"` keeps the first MAX bytes (fine for HTML — the <head>
+ * is up front); "reject" returns null (a truncated image is a corrupt image).
+ */
+export async function readCapped(
+  res: Response,
+  maxBytes: number,
+  overflow: "truncate" | "reject",
+): Promise<Buffer | null> {
+  const reader = res.body?.getReader();
+  if (!reader) return null;
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.length;
+    if (total > maxBytes) {
+      await reader.cancel();
+      if (overflow === "reject") return null;
+      chunks.push(value.slice(0, value.length - (total - maxBytes)));
+      break;
+    }
+    chunks.push(value);
+  }
+  return Buffer.concat(chunks);
+}
+
+async function safeFetchHtml(startUrl: string): Promise<{ url: string; html: string } | null> {
+  const got = await safeGet(startUrl, "text/html,application/xhtml+xml");
+  if (!got) return null;
+
+  const type = got.res.headers.get("content-type") ?? "";
+  if (!type.includes("html") && !type.includes("xml")) return null;
+
+  const body = await readCapped(got.res, MAX_BYTES, "truncate");
+  if (!body) return null;
+  return { url: got.url, html: body.toString("utf8") };
 }
 
 // ── Extraction ──────────────────────────────────────────────────────────────

@@ -22,18 +22,24 @@ export interface CommitResult {
  * ever exposes a credential to the browser.
  *
  * `writeFile` is the primitive — items are one thing that gets written, the
- * taxonomy index files (moods/tags/collections) are another.
+ * taxonomy index files (moods/tags/collections) are another. It takes a Buffer
+ * too so mirrored artwork (binary) rides the same seam.
  */
 export interface Committer {
   /** Write a repo-relative file (POSIX path, inside content/) and commit it. */
-  writeFile(repoPath: string, text: string, message: string): Promise<CommitResult>;
+  writeFile(repoPath: string, data: string | Buffer, message: string): Promise<CommitResult>;
   write(item: ContentItem, message: string): Promise<CommitResult>;
+}
+
+/** Year partition for an item's files, by discovery/creation date. */
+export function itemYear(item: Pick<ContentItem, "discoveredAt" | "createdAt">): string {
+  const year = (item.discoveredAt ?? item.createdAt).slice(0, 4);
+  return /^\d{4}$/.test(year) ? year : "unsorted";
 }
 
 /** Repo-relative path for an item, partitioned by discovery/creation year. */
 export function itemFilePath(item: ContentItem): string {
-  const year = (item.discoveredAt ?? item.createdAt).slice(0, 4);
-  return `content/items/${/^\d{4}$/.test(year) ? year : "unsorted"}/${item.slug}.json`;
+  return `content/items/${itemYear(item)}/${item.slug}.json`;
 }
 
 /** JSON as it lands on disk: 2-space indent, trailing newline, tidy diffs. */
@@ -64,11 +70,11 @@ async function isGitRepo(): Promise<boolean> {
 }
 
 export const localGitCommitter: Committer = {
-  async writeFile(repoPath, text, message): Promise<CommitResult> {
+  async writeFile(repoPath, data, message): Promise<CommitResult> {
     const rel = contentPath(repoPath);
     const abs = path.join(REPO_ROOT, rel);
     await fs.mkdir(path.dirname(abs), { recursive: true });
-    await fs.writeFile(abs, text, "utf8");
+    await fs.writeFile(abs, data);
 
     if (!(await isGitRepo())) {
       return { commit: `nogit-${rel}`, committed: false };
@@ -120,11 +126,11 @@ export function githubCommitter(config?: {
   };
 
   const committer: Committer = {
-    async writeFile(repoPath, text, message): Promise<CommitResult> {
+    async writeFile(repoPath, data, message): Promise<CommitResult> {
       if (!token || !repo) throw new Error("github committer misconfigured: set GITHUB_TOKEN and GITHUB_REPO");
       const rel = contentPath(repoPath);
       const url = `${api}/repos/${repo}/contents/${rel.split("/").map(encodeURIComponent).join("/")}`;
-      const content = Buffer.from(text, "utf8").toString("base64");
+      const content = (typeof data === "string" ? Buffer.from(data, "utf8") : data).toString("base64");
 
       // An update needs the current blob SHA; a create must omit it. 404 = new file.
       let sha: string | undefined;

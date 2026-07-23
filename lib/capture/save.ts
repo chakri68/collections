@@ -4,6 +4,7 @@ import { contentItemSchema } from "../content/schema";
 import { loadFullSnapshot } from "../content/loader";
 import { byId } from "../content/query";
 import { buildContentItem, applyEdit, findDuplicates } from "./build-item";
+import { prepareArtwork } from "./artwork";
 import { defaultCommitter, commitMessage, type Committer } from "../git/committer";
 import type { SaveRequest, SaveOutcome } from "./types";
 
@@ -68,8 +69,25 @@ export async function saveItem(
     return remember(req.idempotencyKey, { ok: false, error: "duplicate", duplicates: dupes });
   }
 
+  // Mirror remote/uploaded artwork into content/images and re-point the item
+  // at our own serving path — og-image links expire, repo files don't. Planned
+  // after the dupe check (a rejected save must not commit an orphan image) and
+  // written before the item JSON (the item never references a missing file).
+  const artwork = await prepareArtwork(parsed.data);
+  if (artwork.kind === "invalid") {
+    return remember(req.idempotencyKey, { ok: false, error: "validation", issues: [artwork.reason] });
+  }
+  let record = parsed.data;
+
   try {
-    const { commit, committed } = await committer.write(parsed.data, commitMessage(parsed.data, mode));
+    if (artwork.kind === "store") {
+      await committer.writeFile(artwork.repoPath, artwork.bytes, `content: add artwork for ${record.title}`);
+      record = {
+        ...record,
+        artwork: { ...record.artwork!, src: artwork.src, width: artwork.width, height: artwork.height },
+      };
+    }
+    const { commit, committed } = await committer.write(record, commitMessage(record, mode));
     // Purge the content cache so the change shows immediately — no rebuild
     // needed. Tag drops the source fetches (github mode); path revalidation
     // regenerates the affected pages.
@@ -81,8 +99,8 @@ export async function saveItem(
     }
     return remember(req.idempotencyKey, {
       ok: true,
-      id: parsed.data.id,
-      slug: parsed.data.slug,
+      id: record.id,
+      slug: record.slug,
       commit,
       committed,
     });

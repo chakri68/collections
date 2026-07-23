@@ -51,6 +51,10 @@ export async function ItemDetail({ slug }: { slug: string }) {
               sizes="(max-width: 720px) 100vw, 320px"
               style={{ objectFit: "cover" }}
               priority
+              // Same rule as Card: only mirrored (local) artwork is optimized;
+              // legacy remote URLs render as-is instead of tripping the host
+              // allowlist.
+              unoptimized={!item.artwork.src.startsWith("/")}
             />
           </div>
         )}

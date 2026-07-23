@@ -4,7 +4,9 @@ import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { saveRequestSchema } from "@/lib/capture/types";
 import { saveItem } from "@/lib/capture/save";
 
-const MAX_BODY_BYTES = 256 * 1024; // capture payloads are small; cap them (spec §8.1 step 2)
+// Text fields are small, but an uploaded image rides along as a base64 data:
+// URL in artwork.src — sized to fit the 4 MB image cap (spec §8.1 step 2).
+const MAX_BODY_BYTES = 8 * 1024 * 1024;
 
 /**
  * The Git-backed write endpoint (spec §8.1). Auth + CSRF + size + schema, then
