@@ -6,7 +6,7 @@ import styles from "./SuggestBox.module.css";
 
 /**
  * "Suggest something" box. Instagram has no pre-filled-DM URL, so on send we
- * copy the suggestion to the clipboard and open the DM thread (ig.me/m/<handle>)
+ * copy the suggestion to the clipboard and open the DM thread (ig.me/<handle>)
  * — one paste and it's sent. Falls back to opening the profile if the DM deep
  * link is unavailable. Renders nothing if no handle is configured.
  */
@@ -26,15 +26,21 @@ export function SuggestBox() {
       // Clipboard blocked — still open the DM; the visitor can retype.
       setCopied(false);
     }
-    window.open(`https://ig.me/m/${INSTAGRAM_HANDLE}`, "_blank", "noopener,noreferrer");
+    window.open(
+      `https://ig.me/${INSTAGRAM_HANDLE}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   return (
     <section className={styles.box}>
-      <h2 className={`${styles.title} prompt`}>Think I&apos;m missing something?</h2>
+      <h2 className={`${styles.title} prompt`}>
+        Think I&apos;m missing something?
+      </h2>
       <p className={styles.lead}>
-        Tell me what belongs in here. Hit send and it copies to your clipboard and
-        opens my Instagram DMs — just paste.
+        Tell me what belongs in here. Hit send and it copies to your clipboard
+        and opens my Instagram DMs — just paste.
       </p>
       <div className={styles.field}>
         <span className={styles.prompt} aria-hidden>
@@ -54,9 +60,15 @@ export function SuggestBox() {
       </div>
       <div className={styles.footer}>
         <span className={styles.hint} role="status">
-          {copied ? "Copied — paste it in the DM that just opened." : "Copies to your clipboard, opens my DMs."}
+          {copied
+            ? "Copied — paste it in the DM that just opened."
+            : "Copies to your clipboard, opens my DMs."}
         </span>
-        <button className="btn primary" onClick={send} disabled={text.trim().length === 0}>
+        <button
+          className="btn primary"
+          onClick={send}
+          disabled={text.trim().length === 0}
+        >
           Send it →
         </button>
       </div>
