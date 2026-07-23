@@ -4,7 +4,11 @@
     "slug": "things-that-broke-my-brain",
     "title": "Things that broke my brain",
     "description": "The ones that rearranged some furniture up there and never quite put it back.",
-    "order": ["outer-wilds", "arrival", "everything-in-its-right-place"],
+    "order": [
+      "outer-wilds",
+      "arrival",
+      "everything-in-its-right-place"
+    ],
     "visibility": "published",
     "rank": 1
   },
@@ -37,8 +41,18 @@
     "slug": "cool-websites",
     "title": "Cool websites",
     "description": "Corners of the web worth keeping a bookmark to.",
-    "order": ["ciechanowski", "every-noise"],
+    "order": [
+      "ciechanowski",
+      "every-noise"
+    ],
     "visibility": "published",
     "rank": 2
+  },
+  {
+    "id": "top-tier-artistry",
+    "slug": "top-tier-artistry",
+    "title": "Top tier artistry",
+    "visibility": "published",
+    "rank": 5
   }
 ]
