@@ -8,7 +8,7 @@
   "subtitle": "Spotify",
   "creator": "Stephen Sanchez",
   "description": "Stephen Sanchez · Angel Face · Song · 2023",
-  "note": "I discovered Stephen when I needed him most in college lmao - his 80s esque songs about love iykyk",
+  "note": "I discovered Stephen when I needed him the most in college lmao - his 80s esque songs about love iykyk",
   "noteFormat": "plain",
   "source": {
     "url": "https://open.spotify.com/track/306H2K5MwE0Z6jJj0jEuar",
@@ -17,8 +17,10 @@
     "embedUrl": "https://open.spotify.com/embed/track/306H2K5MwE0Z6jJj0jEuar"
   },
   "artwork": {
-    "src": "https://i.scdn.co/image/ab67616d0000b273199b850d4877866cf7e318d1",
-    "alt": "Be More"
+    "src": "/artwork/2026/be-more-31a78e1e.webp",
+    "alt": "Be More",
+    "width": 640,
+    "height": 640
   },
   "tags": [
     "classics",
@@ -31,6 +33,6 @@
   "collections": [],
   "visibility": "published",
   "createdAt": "2026-07-22T16:08:45.544Z",
-  "updatedAt": "2026-07-22T16:08:45.544Z",
+  "updatedAt": "2026-07-23T19:54:33.908Z",
   "publishedAt": "2026-07-22T16:08:45.544Z"
 }
