@@ -54,5 +54,12 @@
     "title": "Top tier artistry",
     "visibility": "published",
     "rank": 5
+  },
+  {
+    "id": "smth-to-cry-to",
+    "slug": "smth-to-cry-to",
+    "title": "Smth to cry to",
+    "visibility": "published",
+    "rank": 6
   }
 ]
