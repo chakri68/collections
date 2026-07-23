@@ -78,5 +78,9 @@
   {
     "id": "heart-warming",
     "label": "Heart Warming"
+  },
+  {
+    "id": "calm",
+    "label": "Calm"
   }
 ]
