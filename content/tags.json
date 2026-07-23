@@ -74,5 +74,9 @@
   {
     "id": "philosophy",
     "label": "Philosophy"
+  },
+  {
+    "id": "heart-warming",
+    "label": "Heart Warming"
   }
 ]
