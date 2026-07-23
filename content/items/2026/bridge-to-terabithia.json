@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "bridge-to-terabithia",
+  "slug": "bridge-to-terabithia",
+  "type": "movie",
+  "provider": "web",
+  "title": "Bridge to Terabithia",
+  "description": "A preteen's life is changed after befriending the new girl at school.",
+  "note": "One of my favourite childhood movies. This movie made me fkn cry for weeks lmao. It's basically a tragedy that even Shakespeare would've looked at and gone, \"Damn.\" I had the biggest crush on Leslie, and um... spoiler alert 🫠. The ending, where Jesse brings May to Terabithia and she makes him the king while becoming the queen herself, is one of the most beautiful scenes I've ever watched. \n\nI wouldn't even dare watch it again because of the trauma, though. But I'd 100% recommend it to a friend who hasn't seen it yet. If I suffered, they're suffering with me. 😭",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://app.primevideo.com/detail?gti=amzn1.dv.gti.0abaf197-7870-ee4c-a4e4-73f2fd800691&ref_=atv_lp_share_mv&r=web",
+    "canonicalUrl": "https://app.primevideo.com/detail?gti=amzn1.dv.gti.0abaf197-7870-ee4c-a4e4-73f2fd800691&ref_=atv_lp_share_mv&r=web"
+  },
+  "artwork": {
+    "src": "/artwork/2026/bridge-to-terabithia-9e9de385.webp",
+    "alt": "Prime Video: Bridge to Terabithia",
+    "width": 1200,
+    "height": 1600
+  },
+  "tags": [],
+  "moods": [
+    "melancholy",
+    "nostalgic"
+  ],
+  "collections": [
+    "comfort",
+    "smth-to-cry-to"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-07-23T18:59:41.052Z",
+  "updatedAt": "2026-07-23T18:59:41.052Z",
+  "publishedAt": "2026-07-23T18:59:41.052Z"
+}
