@@ -1,5 +1,21 @@
 [
-  { "id": "cerebral", "label": "Cerebral", "description": "Makes the gears turn." },
-  { "id": "melancholy", "label": "Melancholy", "description": "A pleasant ache." },
-  { "id": "nostalgic", "label": "Nostalgic", "description": "For a past that may not have existed." }
+  {
+    "id": "cerebral",
+    "label": "Cerebral",
+    "description": "Makes the gears turn."
+  },
+  {
+    "id": "melancholy",
+    "label": "Melancholy",
+    "description": "A pleasant ache."
+  },
+  {
+    "id": "nostalgic",
+    "label": "Nostalgic",
+    "description": "For a past that may not have existed."
+  },
+  {
+    "id": "we-gonna-dance",
+    "label": "We gonna dance"
+  }
 ]
