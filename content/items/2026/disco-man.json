@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "disco-man",
+  "slug": "disco-man",
+  "type": "song",
+  "provider": "spotify",
+  "title": "Disco Man",
+  "subtitle": "Spotify",
+  "creator": "Remi Wolf",
+  "description": "Remi Wolf · I'm Allergic To Dogs! · Song · 2020",
+  "note": "Buh - Duh we on fire buh duh we on fireeeee, oh wait sorry I have to write abt this song - I mean what can I say man just a banger",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://open.spotify.com/track/5ZcCBCMtlD0OEWgENAlb5p",
+    "canonicalUrl": "https://open.spotify.com/track/5ZcCBCMtlD0OEWgENAlb5p",
+    "providerId": "track:5ZcCBCMtlD0OEWgENAlb5p",
+    "embedUrl": "https://open.spotify.com/embed/track/5ZcCBCMtlD0OEWgENAlb5p"
+  },
+  "artwork": {
+    "src": "/artwork/2026/disco-man-ab3cd13e.webp",
+    "alt": "Disco Man",
+    "width": 640,
+    "height": 640
+  },
+  "tags": [
+    "banger"
+  ],
+  "moods": [
+    "we-gonna-dance"
+  ],
+  "collections": [],
+  "visibility": "published",
+  "createdAt": "2026-07-24T05:59:35.364Z",
+  "updatedAt": "2026-07-24T05:59:35.364Z",
+  "publishedAt": "2026-07-24T05:59:35.364Z"
+}
