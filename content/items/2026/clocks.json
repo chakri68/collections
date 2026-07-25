@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "clocks",
+  "slug": "clocks",
+  "type": "song",
+  "provider": "spotify",
+  "title": "Clocks",
+  "subtitle": "Spotify",
+  "creator": "Coldplay",
+  "description": "Coldplay · A Rush of Blood to the Head · Song · 2002",
+  "note": "I tear up every fkn time I listen to this song man. The metronome ticking like a clock reminding you of the passing time and you just there yk experiencing it all. Sooooo fkn melancholic and nth else compares frfr. When I heard it in the coldplay concert in Ahmedabad, i swear to god I just thought - Am i ever gonna be happy - where's my home - home people long for - does it exist - if it does will I ever find it ",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://open.spotify.com/track/0BCPKOYdS2jbQ8iyB56Zns",
+    "canonicalUrl": "https://open.spotify.com/track/0BCPKOYdS2jbQ8iyB56Zns",
+    "providerId": "track:0BCPKOYdS2jbQ8iyB56Zns",
+    "embedUrl": "https://open.spotify.com/embed/track/0BCPKOYdS2jbQ8iyB56Zns"
+  },
+  "artwork": {
+    "src": "/artwork/2026/clocks-62b0d0ae.webp",
+    "alt": "Clocks",
+    "width": 640,
+    "height": 640
+  },
+  "tags": [
+    "solitude",
+    "memory"
+  ],
+  "moods": [
+    "melancholy",
+    "nostalgic"
+  ],
+  "collections": [
+    "smth-to-cry-to"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-07-25T20:43:23.959Z",
+  "updatedAt": "2026-07-25T20:43:23.959Z",
+  "publishedAt": "2026-07-25T20:43:23.959Z"
+}
