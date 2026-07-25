@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "sparks-by-coldplay-but-its-1-45am-and-its-been-years",
+  "slug": "sparks-by-coldplay-but-its-1-45am-and-its-been-years",
+  "type": "song",
+  "provider": "youtube",
+  "title": "Sparks by Coldplay but it's 1:45am and it's been years....",
+  "description": "Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube.",
+  "note": "It's 2.15am and it's indeed been years and I wish to see those sparks again",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://youtube.com/watch?v=MK5fPnK4ae4",
+    "canonicalUrl": "https://www.youtube.com/watch?v=MK5fPnK4ae4",
+    "providerId": "MK5fPnK4ae4",
+    "embedUrl": "https://www.youtube-nocookie.com/embed/MK5fPnK4ae4"
+  },
+  "artwork": {
+    "src": "/artwork/2026/sparks-by-coldplay-but-its-1-45am-and-its-been-years-4be75c45.webp",
+    "alt": "Video thumbnail",
+    "width": 480,
+    "height": 360
+  },
+  "tags": [],
+  "moods": [
+    "melancholy"
+  ],
+  "collections": [
+    "smth-to-cry-to"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-07-25T20:46:00.700Z",
+  "updatedAt": "2026-07-25T20:46:00.700Z",
+  "publishedAt": "2026-07-25T20:46:00.700Z"
+}
