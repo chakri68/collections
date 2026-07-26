@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "toilet-etiquette-1",
+  "slug": "toilet-etiquette-1",
+  "type": "note",
+  "provider": "manual",
+  "title": "Toilet etiquette #1",
+  "creator": "Chakri",
+  "note": "You can get so much mileage out of scented candles in a bathroom",
+  "noteFormat": "plain",
+  "artwork": {
+    "src": "/artwork/2026/toilet-etiquette-1-3d8a89e7.webp",
+    "alt": "Toilet etiquette #1",
+    "width": 1254,
+    "height": 1254
+  },
+  "tags": [],
+  "moods": [],
+  "collections": [
+    "toilet-etiquette"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-07-26T05:25:25.889Z",
+  "updatedAt": "2026-07-26T05:25:25.889Z",
+  "publishedAt": "2026-07-26T05:25:25.889Z"
+}
