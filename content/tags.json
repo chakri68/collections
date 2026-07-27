@@ -90,5 +90,9 @@
   {
     "id": "banger",
     "label": "Banger"
+  },
+  {
+    "id": "game",
+    "label": "Game"
   }
 ]
