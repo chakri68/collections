@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "the-tucker-zone-2",
+  "slug": "the-tucker-zone-2",
+  "type": "video",
+  "provider": "youtube",
+  "title": "The Tucker Zone 2",
+  "creator": "JohnTaylorTucker",
+  "description": "Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube.",
+  "note": "Man this shit is soooooo fkn good I mean the best 3d vid experience out there 😭😭 Watched this when I was small and fucking scared myself.\n\nDO NOT WATCH IT WHEN YOU'RE HIGH 🥹",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://youtube.com/watch?v=axIKqBPGh5Q",
+    "canonicalUrl": "https://www.youtube.com/watch?v=axIKqBPGh5Q",
+    "providerId": "axIKqBPGh5Q",
+    "embedUrl": "https://www.youtube-nocookie.com/embed/axIKqBPGh5Q"
+  },
+  "artwork": {
+    "src": "/artwork/2026/the-tucker-zone-2-dbd301e4.webp",
+    "alt": "Video thumbnail",
+    "width": 480,
+    "height": 360
+  },
+  "tags": [
+    "interactive",
+    "memory",
+    "calm"
+  ],
+  "moods": [
+    "cerebral",
+    "nostalgic",
+    "smth-crazy"
+  ],
+  "collections": [
+    "top-tier-artistry",
+    "broke-my-brain",
+    "memory-erase",
+    "comfort"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-07-27T16:49:48.817Z",
+  "updatedAt": "2026-07-27T16:49:48.817Z",
+  "publishedAt": "2026-07-27T16:49:48.817Z"
+}
