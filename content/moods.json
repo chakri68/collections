@@ -21,5 +21,9 @@
   {
     "id": "love",
     "label": "Love"
+  },
+  {
+    "id": "smth-crazy",
+    "label": "Smth Crazy"
   }
 ]
