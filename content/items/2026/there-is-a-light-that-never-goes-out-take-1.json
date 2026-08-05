@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "there-is-a-light-that-never-goes-out-take-1",
+  "slug": "there-is-a-light-that-never-goes-out-take-1",
+  "type": "song",
+  "provider": "spotify",
+  "title": "There Is a Light That Never Goes Out - Take 1",
+  "subtitle": "Spotify",
+  "creator": "The Smiths",
+  "description": "The Smiths · The Queen Is Dead (Deluxe Edition) · Song · 1986",
+  "note": "_Please don't drop me home, because it's not my home, it's their home, and I'm welcome no more._\n\nMaybe in the end love is just the human soul longing for belonging ",
+  "noteFormat": "markdown",
+  "source": {
+    "url": "https://open.spotify.com/track/0XcSmqWQ14leUZ7Jo0z8I2",
+    "canonicalUrl": "https://open.spotify.com/track/0XcSmqWQ14leUZ7Jo0z8I2",
+    "providerId": "track:0XcSmqWQ14leUZ7Jo0z8I2",
+    "embedUrl": "https://open.spotify.com/embed/track/0XcSmqWQ14leUZ7Jo0z8I2"
+  },
+  "artwork": {
+    "src": "/artwork/2026/there-is-a-light-that-never-goes-out-take-1-77453f61.webp",
+    "alt": "There Is a Light That Never Goes Out - Take 1",
+    "width": 640,
+    "height": 640
+  },
+  "tags": [],
+  "moods": [
+    "melancholy"
+  ],
+  "collections": [
+    "smth-to-cry-to"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-08-05T06:27:39.869Z",
+  "updatedAt": "2026-08-05T06:27:39.869Z",
+  "publishedAt": "2026-08-05T06:27:39.869Z"
+}
