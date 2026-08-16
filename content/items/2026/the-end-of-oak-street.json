@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "the-end-of-oak-street",
+  "slug": "the-end-of-oak-street",
+  "type": "movie",
+  "provider": "web",
+  "title": "The End of Oak Street",
+  "description": "When a cosmic anomaly shatters suburbia, one family is thrust into a high-stakes, reality-bending adventure where time collapses, chaos moves in next door, and survival depends on sticking together.",
+  "note": "A really solid dino movie. I loved the family dynamics and the dinosaur models. Really wish hollywood produces more dino movies.",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://www.primevideo.com/detail/0J84ZMEJL8WVBN0E26ZRJEMDE7?ref_=atv_dp_share_cu_r",
+    "canonicalUrl": "https://www.primevideo.com/detail/0J84ZMEJL8WVBN0E26ZRJEMDE7?ref_=atv_dp_share_cu_r"
+  },
+  "artwork": {
+    "src": "/artwork/2026/the-end-of-oak-street-b82b965c.webp",
+    "alt": "Prime Video: The End of Oak Street",
+    "width": 1200,
+    "height": 1600
+  },
+  "tags": [],
+  "moods": [],
+  "collections": [
+    "comfort"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-08-16T19:00:36.856Z",
+  "updatedAt": "2026-08-16T19:00:36.856Z",
+  "publishedAt": "2026-08-16T19:00:36.856Z"
+}
