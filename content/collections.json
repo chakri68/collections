@@ -75,5 +75,12 @@
     "title": "Markiplier",
     "visibility": "published",
     "rank": 8
+  },
+  {
+    "id": "fonts",
+    "slug": "fonts",
+    "title": "Fonts",
+    "visibility": "published",
+    "rank": 9
   }
 ]
