@@ -94,5 +94,9 @@
   {
     "id": "game",
     "label": "Game"
+  },
+  {
+    "id": "font",
+    "label": "Font"
   }
 ]
