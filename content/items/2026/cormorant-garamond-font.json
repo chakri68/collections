@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "cormorant-garamond-font",
+  "slug": "cormorant-garamond-font",
+  "type": "website",
+  "provider": "web",
+  "title": "Cormorant Garamond Font",
+  "subtitle": "Google Fonts",
+  "description": "Cormorant is a free display type family developed by Christian Thalmann. The project currently comprises a total of 45 font files spanning 9 different visual st",
+  "note": "Really good looking Serif Font for headers",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://fonts.google.com/specimen/Cormorant+Garamond",
+    "canonicalUrl": "https://fonts.google.com/specimen/Cormorant+Garamond"
+  },
+  "artwork": {
+    "src": "/artwork/2026/cormorant-garamond-font-978ae630.webp",
+    "alt": "",
+    "width": 782,
+    "height": 161
+  },
+  "tags": [
+    "font"
+  ],
+  "moods": [],
+  "collections": [
+    "fonts"
+  ],
+  "visibility": "published",
+  "createdAt": "2026-09-03T06:23:56.879Z",
+  "updatedAt": "2026-09-03T06:23:56.879Z",
+  "publishedAt": "2026-09-03T06:23:56.879Z"
+}
