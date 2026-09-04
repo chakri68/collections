@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "french-79-hometown",
+  "slug": "french-79-hometown",
+  "type": "song",
+  "provider": "youtube",
+  "title": "French 79 - Hometown",
+  "creator": "French 79",
+  "description": "Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube.",
+  "note": "One of the greatest French electronic music of all time. It's so nostalgic. So inexplicably saddening but with happiness sprinkled in between. Makes me think of all the things I used to do as a kid - my old hobbies and all everything that I've lost over the years.",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://youtu.be/yAv5pLO37mE",
+    "canonicalUrl": "https://www.youtube.com/watch?v=yAv5pLO37mE",
+    "providerId": "yAv5pLO37mE",
+    "embedUrl": "https://www.youtube-nocookie.com/embed/yAv5pLO37mE"
+  },
+  "artwork": {
+    "src": "/artwork/2026/french-79-hometown-be7bc4f3.webp",
+    "alt": "Video thumbnail",
+    "width": 480,
+    "height": 360
+  },
+  "tags": [
+    "electronic",
+    "banger",
+    "heart-warming",
+    "music"
+  ],
+  "moods": [
+    "cerebral",
+    "melancholy",
+    "nostalgic"
+  ],
+  "collections": [
+    "memory-erase",
+    "comfort",
+    "smth-to-cry-to"
+  ],
+  "featured": true,
+  "visibility": "published",
+  "createdAt": "2026-09-04T08:44:53.018Z",
+  "updatedAt": "2026-09-04T08:44:53.018Z",
+  "publishedAt": "2026-09-04T08:44:53.018Z"
+}
