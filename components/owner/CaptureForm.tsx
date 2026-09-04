@@ -349,6 +349,14 @@ function ArtworkField({ artwork, title, inferred, onChange }: {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const src = artwork?.src ?? "";
   const uploaded = src.startsWith("data:");
+  // A saved item's artwork has already been mirrored into the repo, so its src
+  // is a relative path (/artwork/…), not a URL — and a relative path in the
+  // type="url" input below fails the browser's constraint check, which blocks
+  // the whole form on submit ("enter a URL") even when nothing about the image
+  // changed. Treat it like a pending upload: hide it, say where it lives, and
+  // let a pasted URL replace it.
+  const mirrored = !uploaded && src !== "" && !/^https?:\/\//i.test(src);
+  const showsUrl = !uploaded && !mirrored;
 
   const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -367,12 +375,19 @@ function ArtworkField({ artwork, title, inferred, onChange }: {
       <span className="label">
         Image {inferred && <span className={styles.inferredTag}>· inferred</span>}
         {uploaded && <span className={styles.inferredTag}>· upload — stored in the repo on save</span>}
+        {mirrored && <span className={styles.inferredTag}>· stored in the repo</span>}
       </span>
       <input
         type="url"
         inputMode="url"
-        value={uploaded ? "" : src}
-        placeholder={uploaded ? "using the uploaded file — paste a URL to replace it" : "https://…  (cover art / og-image — copied into the repo on save)"}
+        value={showsUrl ? src : ""}
+        placeholder={
+          uploaded
+            ? "using the uploaded file — paste a URL to replace it"
+            : mirrored
+              ? "stored in the repo — paste a URL to replace it"
+              : "https://…  (cover art / og-image — copied into the repo on save)"
+        }
         aria-label="Image URL"
         className={inferred ? styles.inferred : undefined}
         onChange={(e) => {
