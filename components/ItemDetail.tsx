@@ -91,9 +91,9 @@ export async function ItemDetail({ slug }: { slug: string }) {
       </div>
 
       {item.note && (
-        <div className={styles.noteBlock}>
+        <blockquote className={styles.noteBlock}>
           <NoteMarkdown source={item.note} format={item.noteFormat} />
-        </div>
+        </blockquote>
       )}
 
       {item.description && item.type !== "note" && (

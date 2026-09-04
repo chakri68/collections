@@ -73,12 +73,47 @@
   font-size: 12px;
 }
 
+/* The note is the reason the entry exists, so it's the primary text on the
+   page. A bare left rule is exactly what a markdown blockquote looks like —
+   i.e. an aside — which is why it read as secondary next to the description.
+   Framed as a pull quote instead, with the largest body type on the page. */
 .noteBlock {
-  max-width: 68ch;
-  border-left: 2px solid var(--accent-dim);
-  padding: 4px 0 4px 20px;
-  margin: 8px 0 32px;
+  max-width: 62ch;
+  padding: 20px 24px;
+  margin: 4px 0 30px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--radius-well);
 }
+/* Reaches into NoteMarkdown's paragraphs on purpose: the size is a property of
+   this slot, not of the renderer, which also renders 12px card previews. */
+.noteBlock p {
+  font-size: clamp(14px, 1.6vw, 16px);
+  line-height: 1.75;
+  color: var(--text);
+}
+/* Real quotation marks, in the text flow — punctuation, not an ornament parked
+   in a gutter. The opening mark hangs out by one character cell so the first
+   line still starts flush with every line under it. */
+.noteBlock p:first-of-type {
+  text-indent: -1ch;
+}
+.noteBlock p:first-of-type::before {
+  content: "\201C";
+  color: var(--accent);
+}
+.noteBlock p:last-of-type::after {
+  content: "\201D";
+  color: var(--accent);
+}
+@media (max-width: 720px) {
+  .noteBlock {
+    padding: 18px 16px;
+  }
+}
+
+/* Provider blurb — background, not voice. Stays quiet under the note. */
 .description {
   max-width: 68ch;
   color: var(--muted);
