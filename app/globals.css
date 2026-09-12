@@ -1,35 +1,16 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Amber Phosphor Terminal — tokens inlined (this is not a chakri.me origin,
-   so we copy the block per the theme guide's "external project" path rather
-   than depending on theme.chakri.me at build time).
+   Amber Phosphor Terminal.
+
+   The 12 shared tokens (--bg --panel-2 --panel --border --text --muted
+   --accent --accent-dim --warn --danger --font-pixel --font-mono, plus
+   color-scheme) come from theme.chakri.me/tokens.css, linked in app/layout.tsx.
+   lib.chakri.me is a chakri.me origin like every other consumer, so it takes
+   the hosted stylesheet rather than a copy that quietly drifts from it.
    ───────────────────────────────────────────────────────────────────────── */
 :root {
-  color-scheme: dark;
-
-  /* Surfaces (darkest → lightest) */
-  --bg: #000000;
-  --panel-2: #000000;
-  --panel: #0b0b0a;
-
-  /* Lines & text */
-  --border: #2b2925;
-  --text: #ece7da;
-  --muted: #8b8574;
-
-  /* Accent — the ONLY chromatic color */
-  --accent: #ffb000;
-  --accent-dim: #cc8a00;
-  --warn: #ff6a2b;
-  --danger: #ff6b6b;
-
-  /* Fonts (CSS vars supplied by next/font on <html>) */
-  --font-pixel: var(--font-press-start), ui-monospace, monospace;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
-    Consolas, monospace;
-
-  /* Project-local extras (canonical names above are never redefined) */
+  /* Project-local extras. The canonical names above are never redefined here. */
   --radius-input: 4px;
   --radius-ctl: 8px;
   --radius-card: 9px;
@@ -37,6 +18,19 @@
   --glow: 0 0 14px rgba(255, 176, 0, 0.5);
   --glow-soft: 0 0 10px rgba(255, 176, 0, 0.4);
   --backdrop: rgba(2, 4, 8, 0.66);
+}
+
+/* The two font tokens are the one deliberate local override. The hosted tokens
+   name the families literally ("JetBrains Mono", "Press Start 2P"); next/font
+   self-hosts both under generated family names it exposes as CSS variables, so
+   the literal names match no loaded face here. The doubled selector (0,2,0)
+   outranks the hosted `:root` (0,1,0) whatever order the two stylesheets land
+   in — Next decides that, not this file. Colours are never overridden this way;
+   if one ever looks wrong, fix it at theme.chakri.me. */
+:root:root {
+  --font-pixel: var(--font-press-start), ui-monospace, monospace;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
 }
 
 /* Tailwind theme bridge so `font-mono` maps to our stack if a utility is used. */

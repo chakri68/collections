@@ -85,6 +85,15 @@ export default function RootLayout({
       lang="en"
       className={`${jetbrainsMono.variable} ${pressStart.variable}`}
     >
+      <head>
+        {/* Amber Phosphor design tokens — the single source of truth, shared
+            with every other chakri.me site. Linked rather than copied, so a
+            change at the source reaches here without a redeploy. Render-
+            blocking by design: the tokens are in effect before the first paint,
+            so nothing is ever on screen unthemed. Only the two font tokens are
+            overridden locally (see globals.css); the colours come from here. */}
+        <link rel="stylesheet" href="https://theme.chakri.me/tokens.css" />
+      </head>
       <body>
         <AppFrame>{children}</AppFrame>
         {modal}
