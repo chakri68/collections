@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { AMBER, BLACK, TEXT, MUTED, CardStack, loadMono } from "@/lib/og-mark";
 
 export const alt =
-  "Collection — a small collection of things worth keeping, and the reason each one was kept";
+  "Collection: a small collection of things worth keeping, and the reason each one was kept";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -51,7 +51,7 @@ export default async function Image() {
             maxWidth: 620,
           }}
         >
-          A small collection of things worth keeping — and the reason each one
+          A small collection of things worth keeping, and the reason each one
           was kept.
         </div>
         <div

@@ -6,7 +6,7 @@ import { SITE_URL } from "@/lib/site-config";
 import "./globals.css";
 
 const DESCRIPTION =
-  "A small personal collection of things worth keeping — and the reason each one was kept.";
+  "A small personal collection of things worth keeping, and the reason each one was kept.";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
