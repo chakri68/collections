@@ -98,5 +98,9 @@
   {
     "id": "font",
     "label": "Font"
+  },
+  {
+    "id": "absurd",
+    "label": "Absurd"
   }
 ]
