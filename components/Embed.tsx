@@ -23,9 +23,12 @@ function isAllowed(src: string): boolean {
 export function Embed({
   embed,
   openUrl,
+  poster,
 }: {
   embed: EmbedDescriptor;
   openUrl: string;
+  /** Artwork shown dimmed behind the play button, so the stage isn't empty. */
+  poster?: string;
 }) {
   const [active, setActive] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -55,10 +58,17 @@ export function Embed({
     : { aspectRatio: embed.aspectRatio ?? "16 / 9" };
 
   if (!active) {
+    // A short player gets a slim bar, not a big empty stage with a dot in it.
+    const compact = !!embed.height && embed.height <= 200;
     return (
       <button
-        className={styles.poster}
-        style={sizeStyle}
+        className={`${styles.poster} ${compact ? styles.posterCompact : ""}`}
+        style={
+          poster && !compact
+            ? { ...sizeStyle, "--poster": `url("${poster}")` } as React.CSSProperties
+            : sizeStyle
+        }
+        data-poster={poster && !compact ? "" : undefined}
         onClick={() => setActive(true)}
         aria-label={`Play ${embed.title}`}
       >

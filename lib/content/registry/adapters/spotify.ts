@@ -76,7 +76,6 @@ export const spotifyAdapter: ProviderAdapter = {
   getEmbed(item: ContentItem): EmbedDescriptor | null {
     const embed = item.source?.embedUrl;
     if (!embed) return null;
-    const controller = controllerUrl(embed);
     // theme=0 is Spotify's dark embed — no white background against our theme.
     let src = embed;
     try {
@@ -86,15 +85,19 @@ export const spotifyAdapter: ProviderAdapter = {
     } catch {
       /* keep the raw embed if it somehow isn't a valid URL */
     }
+    // From the themed src, so the controller player is dark too.
+    const controller = controllerUrl(src);
     return {
       src,
       title: `${item.title} — Spotify`,
       // A track player snaps to one of four fixed layouts — 80 (compact bar),
       // 152, 232, 352 — and pads whatever height is left over with its own
       // background. Ask for 320 and you get the 280-ish card plus 40px of
-      // filler. So a track must use a band exactly; 352 is the largest.
+      // filler. So a track must use a band exactly. 152 is the compact card:
+      // the entry page already shows the artwork big, so the 352 card would just
+      // be the same cover again, smaller.
       // Albums and playlists are a scrolling list, which fills any tall frame.
-      height: item.type === "song" ? 352 : 640,
+      height: item.type === "song" ? 152 : 640,
       allow:
         "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
       // Spotify ships an IFrame API, so the player is driven through a

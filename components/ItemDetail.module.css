@@ -43,12 +43,14 @@
 .head {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   padding-top: 4px;
+  min-width: 0;
 }
 .badges {
   display: flex;
   gap: 8px;
+  margin-bottom: 4px;
 }
 .title {
   font-size: clamp(16px, 4vw, 24px);
@@ -60,74 +62,118 @@
 }
 .subtitle {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
+  margin-top: -4px;
+}
+/* Compact player (a Spotify track) — fills the column beside the art that used
+   to be empty space. */
+.inlineEmbed {
+  margin-top: 10px;
 }
 .actions {
-  margin-top: 8px;
+  margin-top: 6px;
   display: flex;
   gap: 10px;
   align-items: center;
 }
-.embedHint {
-  color: var(--muted);
-  font-size: 12px;
-}
+
+/* Everything below the header shares one edge-to-edge column — note, player,
+   meta, related. Separate max-widths on each left them all ending at different
+   points, which read as misalignment rather than rhythm. Text inside still
+   caps its own line length. */
 
 /* The note is the reason the entry exists, so it's the primary text on the
-   page. A bare left rule is exactly what a markdown blockquote looks like —
-   i.e. an aside — which is why it read as secondary next to the description.
-   Framed as a pull quote instead, with the largest body type on the page. */
+   page. No box: a panel around one sentence read as a form field, and the
+   curved accent edge looked like a rendering bug. Instead one big pixel-font
+   quote mark hangs in the gutter — unmistakably a quote, and the text itself
+   starts flush on every line. */
 .noteBlock {
-  max-width: 62ch;
-  padding: 20px 24px;
-  margin: 4px 0 30px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--accent);
-  border-radius: var(--radius-well);
+  position: relative;
+  padding: 6px 0 0 44px;
+  margin: 8px 0 18px;
+}
+.noteBlock::before {
+  content: "\201C";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  font-family: var(--font-pixel);
+  font-size: 30px;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: var(--glow-soft);
 }
 /* Reaches into NoteMarkdown's paragraphs on purpose: the size is a property of
    this slot, not of the renderer, which also renders 12px card previews. */
 .noteBlock p {
-  font-size: clamp(14px, 1.6vw, 16px);
-  line-height: 1.75;
+  max-width: 64ch;
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.7;
   color: var(--text);
-}
-/* Real quotation marks, in the text flow — punctuation, not an ornament parked
-   in a gutter. The opening mark hangs out by one character cell so the first
-   line still starts flush with every line under it. */
-.noteBlock p:first-of-type {
-  text-indent: -1ch;
-}
-.noteBlock p:first-of-type::before {
-  content: "\201C";
-  color: var(--accent);
-}
-.noteBlock p:last-of-type::after {
-  content: "\201D";
-  color: var(--accent);
 }
 @media (max-width: 720px) {
   .noteBlock {
-    padding: 18px 16px;
+    padding-left: 32px;
+  }
+  .noteBlock::before {
+    font-size: 22px;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 36px;
+}
+/* Under a note, line up with the quote text rather than the hanging mark. */
+.noteBlock + .chips {
+  padding-left: 44px;
+}
+/* Chips here are labels, not filters — nothing to click. */
+.chips .chip {
+  cursor: default;
+}
+.chips .chip:hover {
+  color: var(--muted);
+  border-color: var(--border);
+}
+.mood::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--glow-soft);
+  margin-right: 2px;
+}
+.mood {
+  color: var(--text);
+}
+.chips .mood:hover {
+  color: var(--text);
+}
+@media (max-width: 720px) {
+  .noteBlock + .chips {
+    padding-left: 32px;
   }
 }
 
 /* Provider blurb — background, not voice. Stays quiet under the note. */
 .description {
-  max-width: 68ch;
+  max-width: 72ch;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.7;
   margin-bottom: 28px;
 }
 .embedWrap {
-  max-width: 720px;
   margin: 0 0 32px;
 }
 
 .meta {
-  max-width: 640px;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 4px 0 4px 0;
@@ -136,16 +182,11 @@
 .metaRow {
   display: grid;
   align-items: center;
-  grid-template-columns: 120px 1fr;
+  grid-template-columns: 96px 1fr;
   gap: 12px;
   padding: 7px 0;
 }
 .metaRow dd {
   font-size: 13px;
   color: var(--text);
-}
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
 }

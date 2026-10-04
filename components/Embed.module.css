@@ -14,9 +14,41 @@
     border-color 0.12s,
     color 0.12s;
 }
+/* Artwork behind the play button, darkened so the glyph and label still read.
+   Two layers on one background: the scrim sits over the image. */
+.poster[data-poster] {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(6, 6, 5, 0.55), rgba(6, 6, 5, 0.9) 75%),
+    var(--poster) center / cover no-repeat,
+    #060605;
+  color: var(--text);
+}
 .poster:hover {
   border-color: var(--accent);
   color: var(--text);
+}
+.posterCompact {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 0 22px;
+  background: radial-gradient(circle at 0% 50%, #1a1710, #060605 70%);
+}
+.posterCompact .play {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  /* ▶ sits left of its own box; nudge it to the optical centre. */
+  padding-left: 4px;
+  font-size: 20px;
+  border: 1px solid var(--accent-dim);
+  border-radius: 50%;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.posterCompact:hover .play {
+  border-color: var(--accent);
+  box-shadow: var(--glow-soft);
 }
 .play {
   font-size: 34px;
