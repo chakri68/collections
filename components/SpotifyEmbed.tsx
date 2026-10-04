@@ -84,7 +84,7 @@ export function SpotifyEmbed({
   }, [url, height, autoPlay, onUnavailable]);
 
   return (
-    <div className={`${styles.frame} ${styles.controllerFrame}`} style={{ height }}>
+    <div className={styles.frame} style={{ height }}>
       <div ref={hostRef} className={styles.controllerHost} />
       {loading && (
         <span className={styles.embedLoading} aria-hidden>

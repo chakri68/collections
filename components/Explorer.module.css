@@ -26,22 +26,23 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5ch;
-  background: var(--panel-2);
+  background: var(--raise-3);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: none;
   border-radius: var(--radius-ctl);
   padding: 7px 12px;
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 12.5px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  transition: background 0.12s, color 0.12s;
 }
 .filterBtn:hover {
-  border-color: var(--accent-dim);
+  background: var(--raise-4);
 }
-.filterActive {
-  border-color: var(--accent);
+.filterActive,
+.filterActive:hover {
+  background: var(--accent-soft);
   color: var(--accent);
 }
 
@@ -55,10 +56,10 @@
   flex-direction: column;
   gap: 14px;
   padding: 14px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-ctl);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  /* Floats over the cards, so it sits a step above them — an opaque lift,
+     not a border or a shadow. */
+  background: linear-gradient(var(--raise-3), var(--raise-3)), var(--panel);
+  border-radius: var(--radius-card);
   transform-origin: top right;
   animation: dropdown-in 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
 }

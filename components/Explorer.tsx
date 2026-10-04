@@ -169,7 +169,7 @@ export function Explorer({ items, index, types, moods, lockedType }: ExplorerPro
       </div>
 
       <div key={resultsKey} className={styles.results}>
-        <Grid items={filtered} />
+        <Grid items={filtered} hideType={!!lockedType} />
       </div>
     </div>
   );

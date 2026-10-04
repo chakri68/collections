@@ -13,7 +13,7 @@
   transition: color 0.12s, border-color 0.12s;
 }
 .add:hover {
-  color: var(--accent);
+  color: var(--text);
   border-color: var(--accent);
 }
 .subtle {
@@ -21,15 +21,15 @@
   place-items: center;
   width: 28px;
   height: 28px;
-  border: 1px solid transparent;
-  border-radius: 6px;
+  border: none;
+  border-radius: var(--radius-ctl);
   color: var(--muted);
   font-size: 13px;
   cursor: pointer;
-  background: none;
-  transition: color 0.12s, border-color 0.12s;
+  background: var(--raise-2);
+  transition: color 0.12s, background 0.12s;
 }
 .subtle:hover {
   color: var(--text);
-  border-color: var(--accent-dim);
+  background: var(--raise-4);
 }

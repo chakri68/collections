@@ -59,8 +59,7 @@
 
 /* One shared shimmer so every block breathes in step. */
 .pulse {
-  background: var(--panel-2);
-  border: 1px solid var(--border);
+  background: var(--raise-2);
   animation: skeleton-pulse 1.1s ease-in-out infinite;
 }
 @keyframes skeleton-pulse {

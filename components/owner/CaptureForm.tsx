@@ -428,7 +428,6 @@ function PreviewCard({ form }: { form: CaptureInput }) {
         )}
         <div className={styles.previewBadges}>
           <span className={styles.previewBadge}>{form.type}</span>
-          {form.provider && form.provider !== "manual" && <span className={styles.previewBadge}>{form.provider}</span>}
         </div>
       </div>
       <div className={styles.previewBody}>

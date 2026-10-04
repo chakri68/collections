@@ -32,10 +32,9 @@
   position: relative;
   width: 100%;
   aspect-ratio: var(--art-aspect, 1 / 1);
-  border: 1px solid var(--border);
   border-radius: var(--radius-well);
   overflow: hidden;
-  background: #060605;
+  background: var(--raise-1);
 }
 .art img {
   object-fit: cover;
@@ -101,7 +100,7 @@
   font-size: 30px;
   line-height: 1;
   color: var(--accent);
-  text-shadow: var(--glow-soft);
+  text-shadow: 0 0 10px var(--glow-soft);
 }
 /* Reaches into NoteMarkdown's paragraphs on purpose: the size is a property of
    this slot, not of the renderer, which also renders 12px card previews. */
@@ -138,7 +137,7 @@
 }
 .chips .chip:hover {
   color: var(--muted);
-  border-color: var(--border);
+  background: var(--raise-1);
 }
 .mood::before {
   content: "";
@@ -146,7 +145,6 @@
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: var(--glow-soft);
   margin-right: 2px;
 }
 .mood {
@@ -174,9 +172,9 @@
 }
 
 .meta {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 4px 0 4px 0;
+  background: var(--raise-1);
+  border-radius: var(--radius-card);
+  padding: 8px 16px;
   margin-bottom: 40px;
 }
 .metaRow {

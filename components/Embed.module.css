@@ -5,34 +5,52 @@
   align-content: center;
   place-items: center;
   gap: 10px;
-  background: radial-gradient(circle at 50% 40%, #14130f, #060605 70%);
-  border: 1px solid var(--border);
+  background: radial-gradient(circle at 50% 40%, var(--raise-2), var(--raise-1) 70%);
+  border: none;
   border-radius: var(--radius-card);
   color: var(--muted);
   cursor: pointer;
   transition:
-    border-color 0.12s,
+    background 0.12s,
     color 0.12s;
 }
 /* Artwork behind the play button, darkened so the glyph and label still read.
    Two layers on one background: the scrim sits over the image. */
 .poster[data-poster] {
   background:
-    radial-gradient(circle at 50% 50%, rgba(6, 6, 5, 0.55), rgba(6, 6, 5, 0.9) 75%),
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--bg) 55%, transparent),
+      color-mix(in srgb, var(--bg) 90%, transparent) 75%
+    ),
     var(--poster) center / cover no-repeat,
-    #060605;
+    var(--bg);
   color: var(--text);
 }
 .poster:hover {
-  border-color: var(--accent);
+  background: radial-gradient(circle at 50% 40%, var(--raise-3), var(--raise-2) 70%);
   color: var(--text);
+}
+/* The artwork poster keeps its image; hover just lifts the label. */
+.poster[data-poster]:hover {
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--bg) 40%, transparent),
+      color-mix(in srgb, var(--bg) 85%, transparent) 75%
+    ),
+    var(--poster) center / cover no-repeat,
+    var(--bg);
 }
 .posterCompact {
   display: flex;
   justify-content: flex-start;
   gap: 16px;
   padding: 0 22px;
-  background: radial-gradient(circle at 0% 50%, #1a1710, #060605 70%);
+  background: radial-gradient(circle at 0% 50%, var(--raise-3), var(--raise-1) 70%);
+}
+.posterCompact:hover {
+  background: radial-gradient(circle at 0% 50%, var(--raise-4), var(--raise-2) 70%);
 }
 .posterCompact .play {
   width: 52px;
@@ -42,18 +60,17 @@
   /* ▶ sits left of its own box; nudge it to the optical centre. */
   padding-left: 4px;
   font-size: 20px;
-  border: 1px solid var(--accent-dim);
+  background: var(--accent-soft);
   border-radius: 50%;
-  transition: border-color 0.12s, box-shadow 0.12s;
+  transition: background 0.12s;
 }
 .posterCompact:hover .play {
-  border-color: var(--accent);
-  box-shadow: var(--glow-soft);
+  background: color-mix(in srgb, var(--accent) 26%, transparent);
 }
 .play {
   font-size: 34px;
   color: var(--accent);
-  text-shadow: var(--glow-soft);
+  text-shadow: 0 0 10px var(--glow-soft);
 }
 .posterLabel {
   font-size: 11px;
@@ -63,11 +80,10 @@
 .frame {
   position: relative;
   width: 100%;
-  border-radius: 16px;
+  border-radius: var(--radius-well);
   overflow: hidden;
-  border: 1px solid var(--border);
   /* Dark under the iframe so there's no white flash before the embed paints. */
-  background: #000;
+  background: var(--bg);
 }
 .frame iframe {
   width: 100%;
@@ -82,12 +98,6 @@
 .controllerHost {
   width: 100%;
   height: 100%;
-}
-/* The player wants its exact layout height (352 for a track). Under the global
-   border-box the 1px frame border would eat into that, leaving the iframe 2px
-   short of its own content and scrolling it. Put the border outside instead. */
-.controllerFrame {
-  box-sizing: content-box;
 }
 .embedLoading {
   position: absolute;

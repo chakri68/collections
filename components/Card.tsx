@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import type { ContentItem } from "@/lib/content/types";
 import { getContentType } from "@/lib/content/registry/content-types";
-import { getProvider } from "@/lib/content/registry/providers";
 import { CardPending } from "./CardPending";
 import styles from "./Card.module.css";
 
@@ -11,9 +10,8 @@ import styles from "./Card.module.css";
  * supply visual tokens (icon, aspect ratio) but never replace the base layout.
  * Server component — no interactivity beyond the link.
  */
-export function Card({ item }: { item: ContentItem }) {
+export function Card({ item, hideType = false }: { item: ContentItem; hideType?: boolean }) {
   const type = getContentType(item.type);
-  const provider = getProvider(item.provider);
   const notePreview = item.noteFormat === "markdown" ? stripMarkdown(item.note) : item.note;
 
   return (
@@ -47,12 +45,14 @@ export function Card({ item }: { item: ContentItem }) {
               {type.icon}
             </div>
           )}
-          <div className={styles.badges}>
-            <span className={styles.badge}>{type.label}</span>
-            {provider && provider.id !== "manual" && (
-              <span className={styles.badge}>{provider.displayName}</span>
-            )}
-          </div>
+          {/* Tag the exception, not the default: no provider badge (a song is
+              Spotify, a video is YouTube — the type already says it), and no type
+              badge on a page that's already filtered to one type. */}
+          {!hideType && (
+            <div className={styles.badges}>
+              <span className={styles.badge}>{type.label}</span>
+            </div>
+          )}
           <CardPending />
         </div>
 

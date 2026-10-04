@@ -1,9 +1,8 @@
 .box {
   margin-top: 48px;
   padding: 22px;
-  border: 1px dashed var(--border);
   border-radius: var(--radius-card);
-  background: radial-gradient(circle at 50% 0%, #0e0d0b, var(--panel-2) 70%);
+  background: var(--raise-1);
 }
 .title {
   font-size: 13px;
@@ -25,14 +24,16 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-input);
+  background: var(--raise-2);
+  border-radius: var(--radius-ctl);
   padding: 10px 12px;
-  transition: border-color 0.12s;
+  transition: background 0.12s;
+}
+.field:hover {
+  background: var(--raise-3);
 }
 .field:focus-within {
-  border-color: var(--accent);
+  box-shadow: 0 0 0 1.5px var(--focus-ring);
 }
 .prompt {
   color: var(--accent);
@@ -52,8 +53,13 @@
   resize: vertical;
   min-height: 3lh;
 }
+/* The field draws the ring; the bare textarea inside opts out of the global one. */
+.input,
+.input:hover,
 .input:focus {
+  background: none;
   outline: none;
+  box-shadow: none;
 }
 .input::placeholder {
   color: var(--muted);

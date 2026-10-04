@@ -22,9 +22,7 @@
   position: relative;
   width: min(880px, 100%);
   background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-ctl);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  border-radius: var(--radius-card);
   padding: 26px 26px 8px;
   animation: modal-pop 0.19s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -37,18 +35,18 @@
   height: 30px;
   display: grid;
   place-items: center;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  background: var(--raise-2);
+  border: none;
+  border-radius: var(--radius-ctl);
   color: var(--muted);
   font-size: 13px;
   cursor: pointer;
-  transition: color 0.12s, border-color 0.12s;
+  transition: color 0.12s, background 0.12s;
   z-index: 1;
 }
 .close:hover {
   color: var(--text);
-  border-color: var(--accent-dim);
+  background: var(--raise-4);
 }
 
 .content {
