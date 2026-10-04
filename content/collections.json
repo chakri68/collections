@@ -82,5 +82,12 @@
     "title": "Fonts",
     "visibility": "published",
     "rank": 9
+  },
+  {
+    "id": "sing-along",
+    "slug": "sing-along",
+    "title": "Sing along",
+    "visibility": "published",
+    "rank": 10
   }
 ]
