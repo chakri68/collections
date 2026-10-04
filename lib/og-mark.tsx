@@ -1,7 +1,7 @@
 /**
- * Shared pieces for the generated social/app images (opengraph, twitter,
- * apple-icon). Keeps the "stack of kept cards" mark and the font loading in one
- * place so the OG card and the iOS icon stay identical.
+ * Shared pieces for the generated social images (opengraph, twitter). Keeps
+ * the "stack of kept cards" mark and the font loading in one place. The app
+ * icons draw the same mark as pixel art — see scripts/icons.mjs.
  *
  * These render through `next/og` (satori), so: every element with children needs
  * `display: "flex"`, and only the CSS subset satori supports is available.
