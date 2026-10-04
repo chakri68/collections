@@ -3,6 +3,7 @@
 import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 import { OwnerControls } from "./owner/OwnerControls";
+import { HapticsToggle } from "./Haptics";
 import styles from "./SiteHeader.module.css";
 
 export interface NavType {
@@ -38,6 +39,7 @@ export function SiteHeader({ types }: { types: NavType[] }) {
           );
         })}
       </nav>
+      <HapticsToggle />
       <OwnerControls />
     </header>
   );
@@ -45,7 +47,7 @@ export function SiteHeader({ types }: { types: NavType[] }) {
 
 function NavLink({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
   return (
-    <Link href={href} className={`${styles.link} ${active ? styles.active : ""}`}>
+    <Link href={href} className={`${styles.link} ${active ? styles.active : ""}`} data-haptic="tick">
       {children}
       <NavPending />
     </Link>

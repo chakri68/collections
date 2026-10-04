@@ -25,6 +25,7 @@ export function Card({ item, hideType = false }: { item: ContentItem; hideType?:
         transitionTypes={["modal"]}
         className={styles.link}
         aria-label={item.title}
+        data-haptic="tick"
       >
         <div className={styles.art}>
           {item.artwork ? (

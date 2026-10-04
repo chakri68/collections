@@ -27,6 +27,12 @@
   animation: modal-pop 0.19s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* The panel takes focus only so Tab starts inside it; it isn't a control, so
+   no ring around the whole sheet. */
+.panel:focus-visible {
+  outline: none;
+}
+
 .close {
   position: absolute;
   top: 12px;
@@ -89,6 +95,85 @@
   to {
     opacity: 0;
     transform: translateY(8px) scale(0.97);
+  }
+}
+
+/* ── Mobile: bottom sheet ───────────────────────────────────────────────────
+   Full width, pinned to the bottom, top corners only. The sheet is its own
+   scroller (capped below full height so the dimmed page still peeks out
+   above — that strip is the tap-to-close target). */
+.handle {
+  display: none;
+}
+@media (max-width: 640px) {
+  .backdrop {
+    align-items: end;
+    justify-items: stretch;
+    padding: 0;
+    overflow: hidden;
+  }
+  .panel {
+    margin: 0;
+    width: 100%;
+    max-height: 92dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    padding: 0 16px calc(16px + env(safe-area-inset-bottom));
+    animation: sheet-in 0.26s cubic-bezier(0.2, 0.9, 0.2, 1);
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  /* While a finger holds it, the sheet tracks 1:1 — no easing lag. */
+  .panel.dragging {
+    transition: none;
+  }
+  /* Grab strip: sticky so it's reachable however far down you've read, and
+     44px tall so it's an honest touch target around a small pill. */
+  .handle {
+    display: grid;
+    place-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 28px;
+    margin: 0 -16px;
+    padding: 8px 0;
+    box-sizing: content-box;
+    background: var(--panel);
+    touch-action: none;
+    cursor: grab;
+  }
+  .handle::before {
+    content: "";
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--raise-4);
+  }
+  .close {
+    top: 10px;
+  }
+  .content {
+    margin-top: 0;
+  }
+  .closing .panel {
+    animation: sheet-out 0.19s cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+}
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes sheet-out {
+  from {
+    transform: translateY(var(--drag, 0px));
+  }
+  to {
+    transform: translateY(100%);
   }
 }
 

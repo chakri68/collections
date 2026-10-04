@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { haptic } from "@/lib/haptics";
 import styles from "./owner.module.css";
 
 export function LoginForm({ next }: { next: string }) {
@@ -27,8 +28,10 @@ export function LoginForm({ next }: { next: string }) {
       }
       const data = await res.json().catch(() => ({}));
       setError(res.status === 429 ? "Too many attempts — wait a bit." : data.error ?? "Sign in failed.");
+      haptic("error");
     } catch {
       setError("Network error.");
+      haptic("error");
     } finally {
       setBusy(false);
     }

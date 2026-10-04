@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CaptureInput, SaveOutcome } from "@/lib/capture/types";
 import { TaxonomyField, type TaxonomyOption } from "./TaxonomyField";
+import { haptic } from "@/lib/haptics";
 import styles from "./owner.module.css";
 
 export interface CapturePrefill extends Partial<CaptureInput> {
@@ -189,14 +190,17 @@ export function CaptureForm({
           localStorage.removeItem(draftKey);
         } catch {}
         setStatus({ kind: "saved", slug: outcome.slug, committed: outcome.committed, commit: outcome.commit });
+        haptic("success");
         router.refresh();
         return;
       }
       setStatus({ kind: "error", outcome, message: describe(outcome, res.status) });
+      haptic("error");
     } catch {
       // Network failure — the draft is retained; the same idempotency key makes
       // a retry safe.
       setStatus({ kind: "error", outcome: null, message: "Network error — your draft is saved. Retry when you're back online." });
+      haptic("error");
     }
   }
 

@@ -1,0 +1,34 @@
+/* Same shape as the header's other icon buttons (OwnerControls .subtle). */
+.toggle {
+  position: relative;
+  display: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-ctl);
+  background: var(--raise-2);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    color 0.12s,
+    background 0.12s;
+}
+/* Dense look, honest hit area: the tap target reaches 44×44. */
+.toggle::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+.on {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+/* Nothing to toggle on a mouse-driven device. */
+@media (pointer: coarse) {
+  .toggle {
+    display: inline-grid;
+  }
+}

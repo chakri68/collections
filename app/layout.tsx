@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Press_Start_2P } from "next/font/google";
 import Script from "next/script";
 import { AppFrame } from "@/components/AppFrame";
+import { HapticsListener } from "@/components/Haptics";
 import { SITE_URL } from "@/lib/site-config";
 import "./globals.css";
 
@@ -97,6 +98,7 @@ export default function RootLayout({
       <body>
         <AppFrame>{children}</AppFrame>
         {modal}
+        <HapticsListener />
         {/* Cloudflare Web Analytics — cookieless, no PII (spec §17). Loads after
             hydration so it never blocks paint. */}
         <Script
