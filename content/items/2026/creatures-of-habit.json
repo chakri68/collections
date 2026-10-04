@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "creatures-of-habit",
+  "slug": "creatures-of-habit",
+  "type": "album",
+  "provider": "spotify",
+  "title": "Creatures of Habit",
+  "subtitle": "Spotify",
+  "creator": "Kiltro",
+  "description": "Kiltro · album · 2019 · 9 songs",
+  "note": "Probably one of the best melancholic albums ever. Love the tunes, the vocals, the themes explored, the instrumental solos. A must listen.",
+  "noteFormat": "plain",
+  "source": {
+    "url": "https://open.spotify.com/album/34gdRibrvFPimenAmpLIl2",
+    "canonicalUrl": "https://open.spotify.com/album/34gdRibrvFPimenAmpLIl2",
+    "providerId": "album:34gdRibrvFPimenAmpLIl2",
+    "embedUrl": "https://open.spotify.com/embed/album/34gdRibrvFPimenAmpLIl2"
+  },
+  "artwork": {
+    "src": "/artwork/2026/creatures-of-habit-16cf314c.jpg",
+    "alt": "Creatures of Habit - Album by Kiltro | Spotify"
+  },
+  "tags": [
+    "sing-along",
+    "exploration",
+    "banger",
+    "head-bangin",
+    "heart-warming",
+    "music"
+  ],
+  "moods": [
+    "cerebral",
+    "melancholy",
+    "nostalgic",
+    "we-gonna-dance"
+  ],
+  "collections": [
+    "broke-my-brain",
+    "memory-erase",
+    "top-tier-artistry",
+    "smth-to-cry-to",
+    "sing-along"
+  ],
+  "featured": true,
+  "visibility": "published",
+  "createdAt": "2026-10-04T11:09:47.134Z",
+  "updatedAt": "2026-10-04T11:09:47.134Z",
+  "publishedAt": "2026-10-04T11:09:47.134Z"
+}
