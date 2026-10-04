@@ -106,5 +106,9 @@
   {
     "id": "satire",
     "label": "Satire"
+  },
+  {
+    "id": "sing-along",
+    "label": "Sing along"
   }
 ]
